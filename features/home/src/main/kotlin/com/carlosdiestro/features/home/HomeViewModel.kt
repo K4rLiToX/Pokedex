@@ -24,7 +24,7 @@ internal class HomeViewModel @Inject constructor(
     private var _currentRegion: MutableStateFlow<RegionPlo?> = MutableStateFlow(null)
     val currentRegion = _currentRegion.asStateFlow()
 
-    val regions: StateFlow<RegionsUiState> = service.regions
+    val regionsState: StateFlow<RegionsUiState> = service.regions
         .map { result ->
             result.fold(
                 onSuccess = { regions ->

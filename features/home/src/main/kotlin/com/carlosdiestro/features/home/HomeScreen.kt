@@ -27,11 +27,11 @@ internal fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val regions by viewModel.regions.collectAsStateWithLifecycle()
+    val regionsState by viewModel.regionsState.collectAsStateWithLifecycle()
     val currentRegion by viewModel.currentRegion.collectAsStateWithLifecycle()
     HomeScreen(
         state = state,
-        regions = regions,
+        regionsState = regionsState,
         currentRegion = currentRegion,
         onRegionClick = viewModel::updateCurrentRegion
     )
@@ -41,7 +41,7 @@ internal fun HomeRoute(
 @Composable
 private fun HomeScreen(
     state: HomeUiState,
-    regions: RegionsUiState,
+    regionsState: RegionsUiState,
     currentRegion: RegionPlo?,
     onRegionClick: (RegionPlo) -> Unit
 ) {
@@ -98,7 +98,7 @@ private fun HomeScreen(
 
     if (regionsDialogState.canOpenRegionsDialog) {
         RegionsDialog(
-            state = regions,
+            state = regionsState,
             currentRegion = currentRegion,
             onRegionClick = onRegionClick,
             onDismiss = regionsDialogState::closeRegionsDialog
