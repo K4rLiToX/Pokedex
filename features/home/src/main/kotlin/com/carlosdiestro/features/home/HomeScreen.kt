@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
@@ -54,6 +57,24 @@ private fun HomeScreen(
                     Text(
                         text = currentRegion?.name ?: ""
                     )
+                },
+                actions = {
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.MoreVert,
+                            contentDescription = null
+                        )
+                    }
                 }
             )
         },
