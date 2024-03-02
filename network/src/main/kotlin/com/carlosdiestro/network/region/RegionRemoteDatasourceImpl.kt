@@ -1,6 +1,5 @@
 package com.carlosdiestro.network.region
 
-import android.util.Log
 import androidx.core.net.toUri
 import com.carlosdiestro.core.region.data.RegionRemoteDatasource
 import com.carlosdiestro.core.region.domain.ID
@@ -16,13 +15,7 @@ internal class RegionRemoteDatasourceImpl @Inject constructor(
 ) : RegionRemoteDatasource {
 
     override suspend fun getPokemonRegions(): Result<List<Region>> {
-        return api.getPokemonRegions().asDomain().also {
-            it.onSuccess { regions ->
-                Log.d("PokeApi", "Regions: $regions")
-            }.onFailure { e ->
-                Log.e("PokeApi", "Error", e)
-            }
-        }
+        return api.getPokemonRegions().asDomain()
     }
 }
 
