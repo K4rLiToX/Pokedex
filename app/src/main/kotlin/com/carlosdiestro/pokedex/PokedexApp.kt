@@ -1,13 +1,13 @@
 package com.carlosdiestro.pokedex
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import com.carlosdiestro.features.home.HomeDestination
+import com.carlosdiestro.features.home.homeScreen
 
 @Composable
 fun PokedexApp(
@@ -30,15 +30,9 @@ fun PokedexNavHost(
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = "home",
+        startDestination = HomeDestination.route,
         modifier = modifier
     ) {
-        composable(
-            route = "home"
-        ) {
-            Column {
-
-            }
-        }
+        homeScreen()
     }
 }
