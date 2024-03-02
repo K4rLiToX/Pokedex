@@ -10,5 +10,5 @@ internal class HomeService @Inject constructor(
     private val regionRepository: RegionRepository
 ) {
 
-    val regions: Flow<Result<List<Region>>> = flow { regionRepository.getPokemonRegions() }
+    val regions: Flow<Result<List<Region>>> = flow { emit(regionRepository.getPokemonRegions()) }
 }
