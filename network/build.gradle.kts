@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:region"))
+
     implementation("io.ktor:ktor-client-core:2.3.8")
     implementation("io.ktor:ktor-client-android:2.3.8")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.8")
