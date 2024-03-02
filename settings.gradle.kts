@@ -17,3 +17,4 @@ rootProject.name = "Pokedex"
 include(":app")
 include(":network")
 include(":features:home")
+include(":core:region")
