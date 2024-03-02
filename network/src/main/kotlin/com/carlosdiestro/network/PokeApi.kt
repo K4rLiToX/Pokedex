@@ -6,7 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import javax.inject.Inject
 
-class PokeApi @Inject constructor(
+internal class PokeApi @Inject constructor(
     private val client: HttpClient
 ) {
     suspend fun getPokemonRegions(): Result<RegionsDto> = runCatching {
