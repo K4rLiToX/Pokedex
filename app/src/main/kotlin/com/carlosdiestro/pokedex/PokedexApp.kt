@@ -30,7 +30,7 @@ fun PokedexNavHost(
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = HomeDestination.route,
+        startDestination = HomeDestination.ROUTE,
         modifier = modifier
     ) {
         homeScreen()

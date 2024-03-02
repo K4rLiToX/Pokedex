@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 private const val HomeBaseRoute = "home"
 
 object HomeDestination {
-    const val route = HomeBaseRoute
+    const val ROUTE = HomeBaseRoute
 
     fun getDestination(): String = HomeBaseRoute
 }
@@ -19,7 +19,7 @@ fun NavController.navigateHome(
 
 fun NavGraphBuilder.homeScreen() {
     composable(
-        route = HomeDestination.route
+        route = HomeDestination.ROUTE
     ) {
         HomeRoute()
     }
