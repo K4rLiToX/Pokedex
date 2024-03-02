@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,11 +21,18 @@ internal class HomeViewModel @Inject constructor(
     private var _state: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
     val state = _state.asStateFlow()
 
+    private var _currentRegion: MutableStateFlow<RegionPlo?> = MutableStateFlow(null)
+    val currentRegion = _currentRegion.asStateFlow()
+
     val regions: StateFlow<RegionsUiState> = service.regions
         .map { result ->
             result.fold(
                 onSuccess = { regions ->
-                    RegionsUiState.Success(regions.asPlo())
+                    val mappedRegions = regions.asPlo()
+                    if (currentRegion.value == null) {
+                        _currentRegion.update { mappedRegions[0] }
+                    }
+                    RegionsUiState.Success(mappedRegions)
                 },
                 onFailure = { e ->
                     RegionsUiState.Error(e.message)
@@ -35,12 +43,16 @@ internal class HomeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = RegionsUiState.Loading
         )
+
+    fun updateCurrentRegion(region: RegionPlo) {
+        _currentRegion.update { region }
+    }
 }
 
 private fun List<Region>.asPlo(): List<RegionPlo> = this.map { region -> region.asPlo() }
 
 private fun Region.asPlo(): RegionPlo = RegionPlo(
     id = this.id.id,
-    name = this.name.name
+    name = this.name.name.replaceFirstChar { it.uppercase() }
 )
 
