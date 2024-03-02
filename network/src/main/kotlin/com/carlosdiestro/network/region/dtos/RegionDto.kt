@@ -1,4 +1,4 @@
-package com.carlosdiestro.network.dtos
+package com.carlosdiestro.network.region.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
