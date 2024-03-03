@@ -5,7 +5,8 @@ import com.carlosdiestro.core.region.domain.RegionRepository
 import javax.inject.Inject
 
 class RegionRepositoryImpl @Inject constructor(
-    private val remote: RegionRemoteDatasource
+    private val remote: RegionRemoteDatasource,
+    private val local: RegionLocalDatasource
 ): RegionRepository {
     override suspend fun getPokemonRegions(): Result<List<Region>> = remote.getPokemonRegions()
 }
