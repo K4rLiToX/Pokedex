@@ -36,11 +36,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:region"))
+
     implementation("io.ktor:ktor-client-core:2.3.8")
     implementation("io.ktor:ktor-client-android:2.3.8")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.8")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
     implementation("com.google.dagger:hilt-android:2.51")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     ksp("com.google.dagger:hilt-android-compiler:2.51")
 }

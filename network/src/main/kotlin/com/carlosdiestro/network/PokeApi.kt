@@ -1,12 +1,12 @@
 package com.carlosdiestro.network
 
-import com.carlosdiestro.network.dtos.RegionsDto
+import com.carlosdiestro.network.region.dtos.RegionsDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import javax.inject.Inject
 
-class PokeApi @Inject constructor(
+internal class PokeApi @Inject constructor(
     private val client: HttpClient
 ) {
     suspend fun getPokemonRegions(): Result<RegionsDto> = runCatching {
