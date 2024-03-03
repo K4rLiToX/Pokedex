@@ -8,7 +8,7 @@ class RegionRepositoryImpl @Inject constructor(
     private val remote: RegionRemoteDatasource,
     private val local: RegionLocalDatasource
 ) : RegionRepository {
-    
+
     override suspend fun getPokemonRegions(): Result<List<Region>> {
         val cacheRegions = local.getAll()
         val isCacheEmpty = cacheRegions.isEmpty()
