@@ -3,7 +3,6 @@ package com.carlosdiestro.database.region
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface RegionDao {
@@ -17,5 +16,5 @@ internal interface RegionDao {
             FROM regions_table
         """
     )
-    fun getAll(): Flow<List<RegionEntity>>
+    suspend fun getAll(): List<RegionEntity>
 }

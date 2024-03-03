@@ -4,8 +4,6 @@ import com.carlosdiestro.core.region.data.RegionLocalDatasource
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.Region
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class RegionLocalDatasourceImpl @Inject constructor(
@@ -14,10 +12,8 @@ internal class RegionLocalDatasourceImpl @Inject constructor(
 
     override suspend fun upsert(regions: List<Region>) = dao.upsert(regions.asEntity())
 
-    override fun getAll(): Flow<List<Region>> = dao.getAll().asDomain()
+    override suspend fun getAll(): List<Region> = dao.getAll().asDomain()
 }
-
-private fun Flow<List<RegionEntity>>.asDomain(): Flow<List<Region>> = this.map { it.asDomain() }
 
 private fun List<RegionEntity>.asDomain(): List<Region> = this.map { it.asDomain() }
 

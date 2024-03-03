@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RegionLocalDatasource {
     suspend fun upsert(regions: List<Region>)
-    fun getAll(): Flow<List<Region>>
+    suspend fun getAll(): List<Region>
 }
