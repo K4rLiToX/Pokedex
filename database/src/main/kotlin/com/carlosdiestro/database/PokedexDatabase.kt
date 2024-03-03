@@ -10,7 +10,7 @@ import com.carlosdiestro.database.region.RegionEntity
         RegionEntity::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 internal abstract class PokedexDatabase : RoomDatabase() {
     abstract fun regionDao(): RegionDao
