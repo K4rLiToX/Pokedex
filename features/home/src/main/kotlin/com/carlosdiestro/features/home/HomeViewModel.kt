@@ -53,6 +53,6 @@ private fun List<Region>.asPlo(): List<RegionPlo> = this.map { region -> region.
 
 private fun Region.asPlo(): RegionPlo = RegionPlo(
     id = this.id.id,
-    name = this.name.name.replaceFirstChar { it.uppercase() }
+    name = this.name.name
 )
 

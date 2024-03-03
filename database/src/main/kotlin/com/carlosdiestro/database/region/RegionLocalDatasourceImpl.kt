@@ -26,5 +26,5 @@ private fun List<Region>.asEntity(): List<RegionEntity> = this.map { region -> r
 
 private fun Region.asEntity(): RegionEntity = RegionEntity(
     id = this.id.id,
-    name = this.name.name
+    name = this.name.name.replaceFirstChar { it.uppercase() }
 )
