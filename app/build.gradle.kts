@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":features:home"))
     implementation(project(":core:region"))
     implementation(project(":network"))
+    implementation(project(":database"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
