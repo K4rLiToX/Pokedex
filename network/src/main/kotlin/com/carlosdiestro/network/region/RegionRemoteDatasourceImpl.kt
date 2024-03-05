@@ -6,7 +6,7 @@ import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.network.PokeApi
-import com.carlosdiestro.network.region.dtos.RegionDto
+import com.carlosdiestro.network.region.dtos.SimpleRegionDto
 import com.carlosdiestro.network.region.dtos.RegionsDto
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ private fun Result<RegionsDto>.asDomain(): Result<List<Region>> =
 
 private fun RegionsDto.asDomain(): List<Region> = this.region.asDomain()
 
-private fun List<RegionDto>.asDomain(): List<Region> = this.map { region ->
+private fun List<SimpleRegionDto>.asDomain(): List<Region> = this.map { region ->
     Region(
         id = ID(region.url.extractId()),
         name = Name(region.name)
