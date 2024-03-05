@@ -2,7 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="RegionDaoTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="given an already cached database, when querying regions, return regions inserted()">
+        <State />
+      </entry>
+      <entry key="given an empty database, when regions are query, then return empty list()">
         <State />
       </entry>
     </value>
