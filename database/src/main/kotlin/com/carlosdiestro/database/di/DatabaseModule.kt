@@ -3,6 +3,7 @@ package com.carlosdiestro.database.di
 import android.content.Context
 import androidx.room.Room
 import com.carlosdiestro.database.PokedexDatabase
+import com.carlosdiestro.database.pokedex.PokedexDao
 import com.carlosdiestro.database.region.RegionDao
 import dagger.Module
 import dagger.Provides
@@ -28,4 +29,8 @@ internal object DatabaseModule {
     @Singleton
     @Provides
     fun provideRegionDao(db: PokedexDatabase): RegionDao = db.regionDao()
+
+    @Singleton
+    @Provides
+    fun providePokedexDao(db: PokedexDatabase): PokedexDao = db.pokedexDao()
 }
