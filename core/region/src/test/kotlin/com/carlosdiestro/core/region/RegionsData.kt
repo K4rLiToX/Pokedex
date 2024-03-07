@@ -2,43 +2,43 @@ package com.carlosdiestro.core.region
 
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
-import com.carlosdiestro.core.region.domain.Region
+import com.carlosdiestro.core.region.domain.SimpleRegion
 
 object RegionsData {
-    val regions: List<Region> = listOf(
-        Region(
+    val regions: List<SimpleRegion> = listOf(
+        SimpleRegion(
             id = ID(1),
             name = Name("kanto")
         ),
-        Region(
+        SimpleRegion(
             id = ID(2),
             name = Name("johto")
         ),
-        Region(
+        SimpleRegion(
             id = ID(3),
             name = Name("hoenn")
         ),
-        Region(
+        SimpleRegion(
             id = ID(4),
             name = Name("sinnoh")
         ),
-        Region(
+        SimpleRegion(
             id = ID(5),
             name = Name("unova")
         ),
-        Region(
+        SimpleRegion(
             id = ID(6),
             name = Name("kalos")
         ),
-        Region(
+        SimpleRegion(
             id = ID(7),
             name = Name("galar")
         ),
-        Region(
+        SimpleRegion(
             id = ID(8),
             name = Name("hisui")
         ),
-        Region(
+        SimpleRegion(
             id = ID(9),
             name = Name("paldea")
         ),

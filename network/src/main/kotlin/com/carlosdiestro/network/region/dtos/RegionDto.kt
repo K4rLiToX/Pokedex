@@ -1,6 +1,5 @@
 package com.carlosdiestro.network.region.dtos
 
-import com.carlosdiestro.network.pokedex.dtos.SimplePokedexDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -14,9 +14,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,21 +36,45 @@ internal fun HomeRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val regionsState by viewModel.regionsState.collectAsStateWithLifecycle()
-    val currentRegion by viewModel.currentRegion.collectAsStateWithLifecycle()
     HomeScreen(
         state = state,
         regionsState = regionsState,
-        currentRegion = currentRegion,
         onRegionClick = viewModel::updateCurrentRegion
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     state: HomeUiState,
     regionsState: RegionsUiState,
-    currentRegion: RegionPlo?,
+    onRegionClick: (RegionPlo) -> Unit
+) {
+    when (state) {
+        is HomeUiState.Error -> Error()
+        HomeUiState.Loading -> Loading()
+        is HomeUiState.Success -> Success(
+            data = state.data,
+            regionsState = regionsState,
+            onRegionClick = onRegionClick
+        )
+    }
+}
+
+@Composable
+private fun Loading() {
+
+}
+
+@Composable
+private fun Error() {
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Success(
+    data: HomeState,
+    regionsState: RegionsUiState,
     onRegionClick: (RegionPlo) -> Unit
 ) {
     val regionsDialogState = rememberRegionsDialogState()
@@ -55,7 +84,7 @@ private fun HomeScreen(
             LargeTopAppBar(
                 title = {
                     Text(
-                        text = currentRegion?.name ?: ""
+                        text = data.currentRegion.name
                     )
                 },
                 actions = {
@@ -101,17 +130,29 @@ private fun HomeScreen(
                     end = 16.dp
                 )
         ) {
-            when (state) {
-                is HomeUiState.Error -> {
+            val onlyOnePokedex = data.currentRegionPokedexes.size == 1
+            if (onlyOnePokedex) {
 
+            } else {
+                var selectedTabIndex by remember {
+                    mutableIntStateOf(0)
                 }
 
-                HomeUiState.Loading -> {
-
-                }
-
-                is HomeUiState.Success -> {
-
+                ScrollableTabRow(
+                    selectedTabIndex = selectedTabIndex
+                ) {
+                    data.currentRegionPokedexes.forEachIndexed { index, pokedex ->
+                        Tab(
+                            selected = index == selectedTabIndex,
+                            onClick = {
+                                selectedTabIndex = index
+                            }
+                        ) {
+                            Text(
+                                text = pokedex.name
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -120,24 +161,9 @@ private fun HomeScreen(
     if (regionsDialogState.canOpenRegionsDialog) {
         RegionsDialog(
             state = regionsState,
-            currentRegion = currentRegion,
+            currentRegion = data.currentRegion,
             onRegionClick = onRegionClick,
             onDismiss = regionsDialogState::closeRegionsDialog
         )
     }
-}
-
-@Composable
-private fun Loading() {
-
-}
-
-@Composable
-private fun Error() {
-
-}
-
-@Composable
-private fun Success() {
-
 }

@@ -1,7 +1,7 @@
 package com.carlosdiestro.core.region
 
 import com.carlosdiestro.core.region.data.RegionRemoteDatasource
-import com.carlosdiestro.core.region.domain.Region
+import com.carlosdiestro.core.region.domain.SimpleRegion
 
 class RegionRemoteDatasourceFake : RegionRemoteDatasource {
 
@@ -11,7 +11,7 @@ class RegionRemoteDatasourceFake : RegionRemoteDatasource {
         returnFailure = true
     }
 
-    override suspend fun getPokemonRegions(): Result<List<Region>> {
+    override suspend fun getPokemonRegions(): Result<List<SimpleRegion>> {
         return if (returnFailure) {
             Result.failure(Throwable())
         } else {

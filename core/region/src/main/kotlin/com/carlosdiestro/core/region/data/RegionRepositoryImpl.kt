@@ -1,7 +1,11 @@
 package com.carlosdiestro.core.region.data
 
+import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository
+import com.carlosdiestro.core.region.domain.SimpleRegion
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RegionRepositoryImpl @Inject constructor(
@@ -9,16 +13,37 @@ class RegionRepositoryImpl @Inject constructor(
     private val local: RegionLocalDatasource
 ) : RegionRepository {
 
-    override suspend fun getPokemonRegions(): Result<List<Region>> {
-        val cacheRegions = local.getAll()
-        val isCacheEmpty = cacheRegions.isEmpty()
+    override fun getPokemonRegions(): Flow<Result<List<SimpleRegion>>> {
+        return local.getAll().map { localRegions ->
+            if (localRegions.isNotEmpty()) Result.success(localRegions)
+            else {
+                remote.getPokemonRegions().fold(
+                    onSuccess = { remoteRegions ->
+                        local.upsert(remoteRegions)
+                        Result.success(remoteRegions)
+                    },
+                    onFailure = { e ->
+                        Result.failure(e)
+                    }
+                )
+            }
+        }
+    }
 
-        if (!isCacheEmpty) return Result.success(cacheRegions)
+    override fun getPokemonRegion(regionId: ID): Flow<Result<Region>> {
+        return local.getRegion(regionId.id).map { localRegion ->
+            localRegion?.let {
+                if (it.pokedexes.isNotEmpty()) Result.success(it)
+                else cacheRemoteRegion(regionId.id)
+            } ?: cacheRemoteRegion(regionId.id)
+        }
+    }
 
-        return remote.getPokemonRegions().fold(
-            onSuccess = { regions ->
-                local.upsert(regions)
-                Result.success(regions)
+    private suspend fun cacheRemoteRegion(regionId: Int): Result<Region> {
+        return remote.getPokemonRegion(regionId).fold(
+            onSuccess = { remoteRegion ->
+                local.upsert(remoteRegion)
+                Result.success(remoteRegion)
             },
             onFailure = { e ->
                 Result.failure(e)

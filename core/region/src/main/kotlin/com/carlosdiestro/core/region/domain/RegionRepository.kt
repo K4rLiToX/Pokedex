@@ -1,5 +1,8 @@
 package com.carlosdiestro.core.region.domain
 
+import kotlinx.coroutines.flow.Flow
+
 interface RegionRepository {
-    suspend fun getPokemonRegions(): Result<List<Region>>
+    fun getPokemonRegions(): Flow<Result<List<SimpleRegion>>>
+    fun getPokemonRegion(regionId: ID): Flow<Result<Region>>
 }
