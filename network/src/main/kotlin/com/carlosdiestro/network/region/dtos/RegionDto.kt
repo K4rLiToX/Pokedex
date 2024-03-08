@@ -10,7 +10,7 @@ data class RegionDto(
     @SerialName("locations")
     val locations: List<LocationDto>,
     @SerialName("main_generation")
-    val mainGeneration: MainGenerationDto,
+    val mainGeneration: MainGenerationDto?,
     @SerialName("name")
     val name: String,
     @SerialName("names")
