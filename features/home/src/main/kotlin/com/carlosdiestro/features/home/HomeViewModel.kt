@@ -7,6 +7,7 @@ import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
 import com.carlosdiestro.features.home.models.PokedexPlo
 import com.carlosdiestro.features.home.models.RegionPlo
+import com.carlosdiestro.features.home.models.UiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,43 +30,19 @@ internal class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<HomeUiState> = combine(
         _currentRegion,
-        service.defaultRegionId
-    ) { currentRegion, defaultRegionId ->
-        currentRegion?.id ?: defaultRegionId
-    }.flatMapLatest { regionId ->
-        service.getRegion(regionId)
-    }.map { regionResult ->
-        regionResult.fold(
-            onSuccess = { region ->
-                HomeUiState.Success(
-                    HomeState(
-                        currentRegion = region.asPlo(),
-                        currentRegionPokedexes = region.pokedexes.asPlo()
-                    )
-                )
-            },
-            onFailure = { e ->
-                HomeUiState.Error(message = e.localizedMessage)
-            }
+        service.defaultRegionId,
+        ::chooseId
+    ).flatMapLatest(service::getRegion)
+        .map(::reduceHomeUiState)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = HomeUiState.Loading
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = HomeUiState.Loading
-    )
 
     val regionsState: StateFlow<RegionsUiState> = service.regions
-        .map { regionsResult ->
-            regionsResult.fold(
-                onSuccess = { regions ->
-                    val mappedRegions = regions.asPlo()
-                    RegionsUiState.Success(mappedRegions)
-                },
-                onFailure = { e ->
-                    RegionsUiState.Error(e.message)
-                }
-            )
-        }.stateIn(
+        .map(::reduceRegionsUiState)
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = RegionsUiState.Loading
@@ -74,6 +51,33 @@ internal class HomeViewModel @Inject constructor(
     fun updateCurrentRegion(region: RegionPlo) {
         _currentRegion.update { region }
     }
+
+    private fun chooseId(currentRegion: RegionPlo?, defaultRegionId: Int): Int =
+        currentRegion?.id ?: defaultRegionId
+
+    private fun reduceHomeUiState(result: UiResult<Region>): HomeUiState = when (result) {
+        is UiResult.Loading -> HomeUiState.Loading
+        is UiResult.Success -> {
+            HomeUiState.Success(
+                HomeState(
+                    currentRegion = result.value.asPlo(),
+                    currentRegionPokedexes = result.value.pokedexes.asPlo()
+                )
+            )
+        }
+
+        is UiResult.Failure -> HomeUiState.Error(message = result.exception.localizedMessage)
+    }
+
+    private fun reduceRegionsUiState(result: Result<List<SimpleRegion>>): RegionsUiState =
+        result.fold(
+            onSuccess = { regions ->
+                RegionsUiState.Success(regions.asPlo())
+            },
+            onFailure = { e ->
+                RegionsUiState.Error(e.message)
+            }
+        )
 }
 
 private fun List<SimpleRegion>.asPlo(): List<RegionPlo> = this.map { region -> region.asPlo() }
