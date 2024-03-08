@@ -49,7 +49,12 @@ internal class HomeViewModel @Inject constructor(
         )
 
     fun updateCurrentRegion(region: RegionPlo) {
-        _currentRegion.update { region }
+        _currentRegion.update { oldRegion ->
+            oldRegion?.let {
+                if (it.id != region.id) region
+                else it
+            } ?: region
+        }
     }
 
     private fun chooseId(currentRegion: RegionPlo?, defaultRegionId: Int): Int =
