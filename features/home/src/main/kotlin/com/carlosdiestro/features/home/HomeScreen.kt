@@ -88,7 +88,7 @@ private fun Success(
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(
+            MediumTopAppBar(
                 title = {
                     Text(
                         text = data.currentRegion.name
