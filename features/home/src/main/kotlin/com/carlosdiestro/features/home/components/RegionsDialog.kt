@@ -48,32 +48,35 @@ class RegionsDialogState {
 
 @Composable
 internal fun RegionsDialog(
-    state: RegionsUiState,
+    dialogState: RegionsDialogState,
+    regionsState: RegionsUiState,
     onDismiss: () -> Unit,
     onRegionClick: (RegionPlo) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {},
-        title = {
-            Text(text = "Choose a region")
-        },
-        text = {
-            when (state) {
-                is RegionsUiState.Error -> Error(message = state.message)
+    if (dialogState.canOpenRegionsDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {},
+            title = {
+                Text(text = "Change region")
+            },
+            text = {
+                when (regionsState) {
+                    is RegionsUiState.Error -> Error(message = regionsState.message)
 
-                RegionsUiState.Loading -> Loading()
+                    RegionsUiState.Loading -> Loading()
 
-                is RegionsUiState.Success -> RegionList(
-                    regions = state.regions,
-                    onDismiss = onDismiss,
-                    onRegionClick = onRegionClick
-                )
-            }
-        },
-        modifier = modifier
-    )
+                    is RegionsUiState.Success -> RegionList(
+                        regions = regionsState.regions,
+                        onDismiss = onDismiss,
+                        onRegionClick = onRegionClick
+                    )
+                }
+            },
+            modifier = modifier
+        )
+    }
 }
 
 @Composable

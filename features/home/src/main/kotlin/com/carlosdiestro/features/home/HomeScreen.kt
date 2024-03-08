@@ -121,6 +121,7 @@ private fun HomeScreen(
                 is HomeUiState.Error -> Error(
                     message = state.message
                 )
+
                 HomeUiState.Loading -> Loading()
                 is HomeUiState.Success -> Success(
                     data = state.data
@@ -129,14 +130,12 @@ private fun HomeScreen(
         }
     }
 
-
-    if (regionsDialogState.canOpenRegionsDialog) {
-        RegionsDialog(
-            state = regionsState,
-            onRegionClick = onRegionClick,
-            onDismiss = regionsDialogState::closeRegionsDialog
-        )
-    }
+    RegionsDialog(
+        dialogState = regionsDialogState,
+        regionsState = regionsState,
+        onRegionClick = onRegionClick,
+        onDismiss = regionsDialogState::closeRegionsDialog
+    )
 }
 
 @Composable
