@@ -15,6 +15,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
@@ -48,43 +49,10 @@ internal fun HomeRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     state: HomeUiState,
-    regionsState: RegionsUiState,
-    onRegionClick: (RegionPlo) -> Unit
-) {
-    when (state) {
-        is HomeUiState.Error -> Error()
-        HomeUiState.Loading -> Loading()
-        is HomeUiState.Success -> Success(
-            data = state.data,
-            regionsState = regionsState,
-            onRegionClick = onRegionClick
-        )
-    }
-}
-
-@Composable
-private fun Loading() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-private fun Error() {
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun Success(
-    data: HomeState,
     regionsState: RegionsUiState,
     onRegionClick: (RegionPlo) -> Unit
 ) {
@@ -94,9 +62,21 @@ private fun Success(
         topBar = {
             MediumTopAppBar(
                 title = {
-                    Text(
-                        text = data.currentRegion.name
-                    )
+                    when (state) {
+                        is HomeUiState.Error -> {}
+                        HomeUiState.Loading -> {
+                            Text(
+                                text = "..."
+                            )
+                        }
+
+                        is HomeUiState.Success -> {
+                            Text(
+                                text = state.data.currentRegion.name
+                            )
+                        }
+                    }
+
                 },
                 actions = {
                     IconButton(
@@ -134,50 +114,94 @@ private fun Success(
     ) { contentPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            val onlyOnePokedex = data.currentRegionPokedexes.size == 1
-            if (onlyOnePokedex) {
-
-            } else {
-                var selectedTabIndex by remember {
-                    mutableIntStateOf(0)
-                }
-
-                PrimaryScrollableTabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    edgePadding = 0.dp,
-                    divider = {},
-                    modifier = Modifier
-                        .height(48.dp)
-                ) {
-                    data.currentRegionPokedexes.forEachIndexed { index, pokedex ->
-                        Tab(
-                            selected = index == selectedTabIndex,
-                            onClick = {
-                                selectedTabIndex = index
-                            },
-                            text = {
-                                Text(
-                                    text = pokedex.name,
-                                    textAlign = TextAlign.Center
-                                )
-                            },
-                            modifier = Modifier
-                                .height(48.dp)
-                        )
-                    }
-                }
+            when (state) {
+                is HomeUiState.Error -> Error(
+                    message = state.message
+                )
+                HomeUiState.Loading -> Loading()
+                is HomeUiState.Success -> Success(
+                    data = state.data
+                )
             }
         }
     }
 
+
     if (regionsDialogState.canOpenRegionsDialog) {
         RegionsDialog(
             state = regionsState,
-            currentRegion = data.currentRegion,
             onRegionClick = onRegionClick,
             onDismiss = regionsDialogState::closeRegionsDialog
         )
+    }
+}
+
+@Composable
+private fun Loading() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun Error(
+    message: String?
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(
+            text = message ?: "",
+            style = MaterialTheme.typography.headlineMedium
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Success(
+    data: HomeState
+) {
+    val onlyOnePokedex = data.currentRegionPokedexes.size == 1
+    if (onlyOnePokedex) {
+
+    } else {
+        var selectedTabIndex by remember {
+            mutableIntStateOf(0)
+        }
+
+        PrimaryScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            edgePadding = 0.dp,
+            divider = {},
+            modifier = Modifier
+                .height(48.dp)
+        ) {
+            data.currentRegionPokedexes.forEachIndexed { index, pokedex ->
+                Tab(
+                    selected = index == selectedTabIndex,
+                    onClick = {
+                        selectedTabIndex = index
+                    },
+                    text = {
+                        Text(
+                            text = pokedex.name,
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    modifier = Modifier
+                        .height(48.dp)
+                )
+            }
+        }
     }
 }

@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,7 +49,6 @@ class RegionsDialogState {
 @Composable
 internal fun RegionsDialog(
     state: RegionsUiState,
-    currentRegion: RegionPlo?,
     onDismiss: () -> Unit,
     onRegionClick: (RegionPlo) -> Unit,
     modifier: Modifier = Modifier
@@ -71,7 +67,6 @@ internal fun RegionsDialog(
 
                 is RegionsUiState.Success -> RegionList(
                     regions = state.regions,
-                    currentRegion = currentRegion,
                     onDismiss = onDismiss,
                     onRegionClick = onRegionClick
                 )
@@ -84,7 +79,6 @@ internal fun RegionsDialog(
 @Composable
 private fun RegionList(
     regions: List<RegionPlo>,
-    currentRegion: RegionPlo?,
     onDismiss: () -> Unit,
     onRegionClick: (RegionPlo) -> Unit,
     modifier: Modifier = Modifier
@@ -100,7 +94,6 @@ private fun RegionList(
         ) { region ->
             RegionItem(
                 region = region,
-                isSelected = currentRegion == region,
                 onClick = {
                     onRegionClick(region)
                     onDismiss()
@@ -113,7 +106,6 @@ private fun RegionList(
 @Composable
 private fun RegionItem(
     region: RegionPlo,
-    isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -133,12 +125,6 @@ private fun RegionItem(
             text = region.name,
             style = MaterialTheme.typography.titleMedium,
         )
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Rounded.CheckCircle,
-                contentDescription = null
-            )
-        }
     }
 }
 
