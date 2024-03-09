@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-inline fun <ResultType, RequestType> synchronizer(
+internal inline fun <ResultType, RequestType> synchronizer(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> Result<RequestType>,
     crossinline cache: suspend (RequestType) -> Unit,
@@ -30,7 +30,7 @@ inline fun <ResultType, RequestType> synchronizer(
     emitAll(flow)
 }
 
-inline fun <ResultType, RequestType, MappedType> mapSynchronizer(
+internal inline fun <ResultType, RequestType, MappedType> mapSynchronizer(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> Result<RequestType>,
     crossinline cache: suspend (RequestType) -> Unit,
