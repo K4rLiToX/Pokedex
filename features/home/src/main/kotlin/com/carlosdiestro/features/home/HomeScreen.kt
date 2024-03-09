@@ -71,9 +71,11 @@ private fun HomeScreen(
                         }
 
                         is HomeUiState.Success -> {
-                            Text(
-                                text = state.data.currentRegion.name
-                            )
+                            state.data.currentRegion?.name?.let {
+                                Text(
+                                    text = it
+                                )
+                            }
                         }
                     }
 

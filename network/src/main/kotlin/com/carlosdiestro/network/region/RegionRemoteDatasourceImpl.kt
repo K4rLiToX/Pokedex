@@ -40,9 +40,8 @@ private fun List<SimpleRegionDto>.asDomain(): List<SimpleRegion> = this.map { re
 }
 
 @JvmName("regionDtoAsDomain")
-private fun Result<RegionDto>.asDomain(): Result<Region> = this.mapCatching { region ->
-    region.asDomain()
-}
+private fun Result<RegionDto>.asDomain(): Result<Region> =
+    this.mapCatching(RegionDto::asDomain)
 
 private fun RegionDto.asDomain(): Region = Region(
     id = ID(this.id),

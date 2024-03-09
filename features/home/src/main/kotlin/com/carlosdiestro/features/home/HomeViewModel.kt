@@ -60,13 +60,13 @@ internal class HomeViewModel @Inject constructor(
     private fun chooseId(currentRegion: RegionPlo?, defaultRegionId: Int): Int =
         currentRegion?.id ?: defaultRegionId
 
-    private fun reduceHomeUiState(result: UiResult<Region>): HomeUiState = when (result) {
+    private fun reduceHomeUiState(result: UiResult<Region?>): HomeUiState = when (result) {
         is UiResult.Loading -> HomeUiState.Loading
         is UiResult.Success -> {
             HomeUiState.Success(
                 HomeState(
-                    currentRegion = result.value.asPlo(),
-                    currentRegionPokedexes = result.value.pokedexes.asPlo()
+                    currentRegion = result.value?.asPlo(),
+                    currentRegionPokedexes = result.value?.pokedexes?.asPlo() ?: emptyList()
                 )
             )
         }
@@ -74,15 +74,12 @@ internal class HomeViewModel @Inject constructor(
         is UiResult.Failure -> HomeUiState.Error(message = result.exception.localizedMessage)
     }
 
-    private fun reduceRegionsUiState(result: Result<List<SimpleRegion>>): RegionsUiState =
-        result.fold(
-            onSuccess = { regions ->
-                RegionsUiState.Success(regions.asPlo())
-            },
-            onFailure = { e ->
-                RegionsUiState.Error(e.message)
-            }
-        )
+    private fun reduceRegionsUiState(result: UiResult<List<SimpleRegion>>): RegionsUiState =
+        when (result) {
+            is UiResult.Failure -> RegionsUiState.Error(result.exception.message)
+            UiResult.Loading -> RegionsUiState.Loading
+            is UiResult.Success -> RegionsUiState.Success(result.value.asPlo())
+        }
 }
 
 private fun List<SimpleRegion>.asPlo(): List<RegionPlo> = this.map { region -> region.asPlo() }

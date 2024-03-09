@@ -1,5 +1,6 @@
 package com.carlosdiestro.features.home
 
+import com.carlosdiestro.core.region.data.DataResource
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository
@@ -15,22 +16,37 @@ internal class HomeService @Inject constructor(
     private val regionRepository: RegionRepository
 ) {
 
-    val regions: Flow<Result<List<SimpleRegion>>> = regionRepository.getPokemonRegions()
+    val regions: Flow<UiResult<List<SimpleRegion>>> = flow {
+        regionRepository.getPokemonRegions()
+            .onStart { emit(UiResult.Loading) }
+            .collect { resource ->
+                val result = when (resource) {
+                    is DataResource.Failure -> {
+                        resource.data?.let { regions ->
+                            if (regions.isNotEmpty()) UiResult.Success(regions)
+                            else UiResult.Failure(resource.exception)
+                        } ?: UiResult.Failure(resource.exception)
+                    }
+                    is DataResource.Success -> UiResult.Success(resource.data)
+                }
+                emit(result)
+            }
+    }
 
     val defaultRegionId: Flow<Int> = flowOf(1)
-    fun getRegion(regionId: Int): Flow<UiResult<Region>> = flow {
+    fun getRegion(regionId: Int): Flow<UiResult<Region?>> = flow {
         regionRepository.getPokemonRegion(ID(regionId))
             .onStart { emit(UiResult.Loading) }
-            .collect { result ->
-                val value = result.fold(
-                    onSuccess = { region ->
-                        UiResult.Success(region)
-                    },
-                    onFailure = { e ->
-                        UiResult.Failure(e)
+            .collect { resource ->
+                val result = when (resource) {
+                    is DataResource.Failure -> {
+                        resource.data?.let { region ->
+                            UiResult.Success(region)
+                        } ?: UiResult.Failure(resource.exception)
                     }
-                )
-                emit(value)
+                    is DataResource.Success -> UiResult.Success(resource.data)
+                }
+                emit(result)
             }
     }
 }

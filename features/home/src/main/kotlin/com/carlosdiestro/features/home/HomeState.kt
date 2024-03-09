@@ -10,7 +10,7 @@ internal sealed interface HomeUiState {
 }
 
 internal data class HomeState(
-    val currentRegion: RegionPlo,
+    val currentRegion: RegionPlo?,
     val currentRegionPokedexes: List<PokedexPlo>
 )
 
