@@ -27,6 +27,7 @@ internal class HomeService @Inject constructor(
                             else UiResult.Failure(resource.exception)
                         } ?: UiResult.Failure(resource.exception)
                     }
+
                     is DataResource.Success -> UiResult.Success(resource.data)
                 }
                 emit(result)
@@ -44,6 +45,7 @@ internal class HomeService @Inject constructor(
                             UiResult.Success(region)
                         } ?: UiResult.Failure(resource.exception)
                     }
+
                     is DataResource.Success -> UiResult.Success(resource.data)
                 }
                 emit(result)
