@@ -3,8 +3,11 @@ package com.carlosdiestro.database
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.carlosdiestro.database.pokedex.PokedexDao
+import com.carlosdiestro.database.pokedex.PokedexEntity
 import com.carlosdiestro.database.region.RegionDao
 import com.carlosdiestro.database.region.RegionEntity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -16,7 +19,8 @@ import org.junit.runner.RunWith
 class RegionDaoTest {
 
     private lateinit var database: PokedexDatabase
-    private lateinit var dao: RegionDao
+    private lateinit var regionDao: RegionDao
+    private lateinit var pokedexDao: PokedexDao
 
     @Before
     fun setUp() {
@@ -25,7 +29,8 @@ class RegionDaoTest {
                 context = InstrumentationRegistry.getInstrumentation().context,
                 klass = PokedexDatabase::class.java,
             ).allowMainThreadQueries().build()
-        dao = database.regionDao()
+        regionDao = database.regionDao()
+        pokedexDao = database.pokedexDao()
     }
 
     @Test
@@ -34,16 +39,31 @@ class RegionDaoTest {
         // Database is already empty when initialized
 
         // when
-        val regions = dao.getAll()
+        val regions = regionDao.getAll().first()
 
         // then
         assertTrue(regions.isEmpty())
     }
 
     @Test
-    fun `given an already cached database when querying regions then return regions inserted`() =
+    fun `given an empty database when querying for a region then return null`() = runBlocking {
+        // given
+        // Database is already empty when initialized
+
+        // when
+        val region = regionDao.getRegion(1).first()
+
+        // then
+        assertTrue(region == null)
+    }
+
+    @Test
+    fun `given an empty database when inserting a list of regions and querying them then return regions inserted`() =
         runBlocking {
             // given
+            // Database is already empty when initialized
+
+            // when
             val newRegions = listOf(
                 RegionEntity(
                     id = 1,
@@ -59,12 +79,64 @@ class RegionDaoTest {
                 )
             )
 
-            dao.upsert(newRegions)
-
-            // when
-            val regions = dao.getAll()
+            regionDao.upsert(newRegions)
+            val regions = regionDao.getAll().first()
 
             // then
             assertEquals(regions, newRegions)
+        }
+
+    @Test
+    fun `given an empty database when inserting a region and querying it then return region inserted`() =
+        runBlocking {
+            // given
+            // Database is already empty when initialize
+
+            // when
+            val regionId = 1
+            val newRegion = RegionEntity(
+                id = regionId,
+                name = "Kanto"
+            )
+
+            regionDao.upsert(newRegion)
+            val region = regionDao.getRegion(regionId).first()
+
+            // then
+            assertTrue(region?.region?.id == regionId)
+        }
+
+    @Test
+    fun `given an empty database when inserting a region with pokedexes and querying it then return region with pokedexes inserted`() =
+        runBlocking {
+            // given
+            // Database is already empty when initialized
+
+            // when
+            val regionId = 1
+            val newRegion = RegionEntity(
+                id = regionId,
+                name = "Kanto"
+            )
+            val pokedexes = listOf(
+                PokedexEntity(
+                    id = 1,
+                    regionId = regionId,
+                    name = "Original"
+                ),
+                PokedexEntity(
+                    id = 2,
+                    regionId = regionId,
+                    name = "Updated"
+                )
+            )
+            regionDao.upsert(newRegion)
+            pokedexDao.upsert(pokedexes)
+
+            val region = regionDao.getRegion(regionId).first()
+
+            // then
+            assertTrue(region?.region?.id == regionId)
+            assertTrue(region?.pokedexes == pokedexes)
         }
 }

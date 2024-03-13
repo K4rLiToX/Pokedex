@@ -11,10 +11,10 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="given an already cached database, when querying regions, return regions inserted()">
+      <entry key="given an empty database when inserting a region with pokedexes and querying it then return region with pokedexes inserted()">
         <State />
       </entry>
-      <entry key="given an empty database, when regions are query, then return empty list()">
+      <entry key="given an empty database when querying regions then return empty list()">
         <State />
       </entry>
     </value>
