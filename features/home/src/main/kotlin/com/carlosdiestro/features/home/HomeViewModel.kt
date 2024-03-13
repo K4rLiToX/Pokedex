@@ -2,6 +2,7 @@ package com.carlosdiestro.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.carlosdiestro.core.region.data.SyncResult
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
@@ -32,16 +33,50 @@ internal class HomeViewModel @Inject constructor(
         _currentRegion,
         service.defaultRegionId,
         ::chooseId
-    ).flatMapLatest(service::getRegion)
-        .map(::reduceHomeUiState)
+    ).flatMapLatest(service::observeRegion)
+        .map { result ->
+            when (result) {
+                UiResult.Loading -> HomeUiState.Loading
+                is UiResult.Empty -> {
+                    val syncResult = service.synchronizePokemonRegion(result.extra!!)
+                    when (syncResult) {
+                        SyncResult.Success, SyncResult.NotNecessary -> HomeUiState.Loading
+                        SyncResult.Error -> HomeUiState.DataNotAvailable
+                    }
+                }
+
+                is UiResult.Success -> HomeUiState.Success(
+                    HomeState(
+                        currentRegion = result.value.asPlo(),
+                        currentRegionPokedexes = result.value.pokedexes.asPlo()
+                    )
+                )
+
+                is UiResult.Failure -> HomeUiState.DataNotAvailable
+            }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = HomeUiState.Loading
         )
 
-    val regionsState: StateFlow<RegionsUiState> = service.regions
-        .map(::reduceRegionsUiState)
+    val regionsState: StateFlow<RegionsUiState> = service.observeRegions()
+        .map { result ->
+            when (result) {
+                UiResult.Loading -> RegionsUiState.Loading
+                is UiResult.Empty -> {
+                    val syncResult = service.synchronizePokemonRegions()
+                    when (syncResult) {
+                        SyncResult.Success, SyncResult.NotNecessary -> RegionsUiState.Loading
+                        SyncResult.Error -> RegionsUiState.DataNotAvailable
+                    }
+                }
+
+                is UiResult.Success -> RegionsUiState.Success(result.value.asPlo())
+                is UiResult.Failure -> RegionsUiState.DataNotAvailable
+            }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -59,27 +94,6 @@ internal class HomeViewModel @Inject constructor(
 
     private fun chooseId(currentRegion: RegionPlo?, defaultRegionId: Int): Int =
         currentRegion?.id ?: defaultRegionId
-
-    private fun reduceHomeUiState(result: UiResult<Region?>): HomeUiState = when (result) {
-        is UiResult.Loading -> HomeUiState.Loading
-        is UiResult.Success -> {
-            HomeUiState.Success(
-                HomeState(
-                    currentRegion = result.value?.asPlo(),
-                    currentRegionPokedexes = result.value?.pokedexes?.asPlo() ?: emptyList()
-                )
-            )
-        }
-
-        is UiResult.Failure -> HomeUiState.Error(message = result.exception.localizedMessage)
-    }
-
-    private fun reduceRegionsUiState(result: UiResult<List<SimpleRegion>>): RegionsUiState =
-        when (result) {
-            is UiResult.Failure -> RegionsUiState.Error(result.exception.message)
-            UiResult.Loading -> RegionsUiState.Loading
-            is UiResult.Success -> RegionsUiState.Success(result.value.asPlo())
-        }
 }
 
 private fun List<SimpleRegion>.asPlo(): List<RegionPlo> = this.map { region -> region.asPlo() }

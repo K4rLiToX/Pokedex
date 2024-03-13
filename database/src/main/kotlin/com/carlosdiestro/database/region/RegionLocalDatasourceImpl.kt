@@ -1,6 +1,5 @@
 package com.carlosdiestro.database.region
 
-import com.carlosdiestro.core.region.data.RegionCache
 import com.carlosdiestro.core.region.data.RegionLocalDatasource
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
@@ -9,8 +8,10 @@ import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
 import com.carlosdiestro.database.pokedex.PokedexDao
 import com.carlosdiestro.database.pokedex.PokedexEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RegionLocalDatasourceImpl @Inject constructor(
@@ -18,22 +19,29 @@ internal class RegionLocalDatasourceImpl @Inject constructor(
     private val pokedexDao: PokedexDao
 ) : RegionLocalDatasource {
 
-    override suspend fun upsert(regions: List<SimpleRegion>) = regionDao.upsert(regions.asEntity())
+    override suspend fun upsert(regions: List<SimpleRegion>) = regionDao.upsert(
+        withContext(Dispatchers.Default) { regions.asEntity() }
+    )
 
     override suspend fun upsert(region: Region) {
-        regionDao.upsert(region.asEntity())
-        pokedexDao.upsert(region.pokedexes.asEntity())
+        regionDao.upsert(
+            withContext(Dispatchers.Default) { region.asEntity() }
+        )
+        pokedexDao.upsert(
+            withContext(Dispatchers.Default) { region.pokedexes.asEntity() }
+        )
     }
 
     override fun getAll(): Flow<List<SimpleRegion>> =
-        regionDao.getAll().asDomain()
+        regionDao.getAll().map {
+            withContext(Dispatchers.Default) { it.asDomain() }
+        }
 
-    override fun getRegion(regionId: Int): Flow<RegionCache?> =
-        regionDao.getRegion(regionId).asCacheEntity()
+    override fun getRegion(regionId: Int): Flow<Region?> =
+        regionDao.getRegion(regionId).map {
+            withContext(Dispatchers.Default) { it?.asDomain() }
+        }
 }
-
-private fun Flow<List<RegionEntity>>.asDomain(): Flow<List<SimpleRegion>> =
-    this.map(List<RegionEntity>::asDomain)
 
 private fun List<RegionEntity>.asDomain(): List<SimpleRegion> =
     this.map(RegionEntity::asDomain)
@@ -49,14 +57,12 @@ private fun List<SimpleRegion>.asEntity(): List<RegionEntity> =
 
 private fun SimpleRegion.asEntity(): RegionEntity = RegionEntity(
     id = this.id.id,
-    name = this.name.name.replaceFirstChar { it.uppercase() },
-    lastFetched = 0L
+    name = this.name.name.replaceFirstChar { it.uppercase() }
 )
 
 private fun Region.asEntity(): RegionEntity = RegionEntity(
     id = this.id.id,
-    name = this.name.name,
-    lastFetched = System.currentTimeMillis()
+    name = this.name.name.replaceFirstChar { it.uppercase() }
 )
 
 @JvmName("listSimplePokedexAsEntity")
@@ -68,16 +74,11 @@ private fun SimplePokedex.asEntity(): PokedexEntity = PokedexEntity(
     name = this.name.name.replace("-", " ").replaceFirstChar { it.uppercase() }
 )
 
-@JvmName("flowRegionWithPokedexesAsCacheEntity")
-private fun Flow<RegionWithPokedexes?>.asCacheEntity(): Flow<RegionCache?> =
-    this.map { it?.asCacheEntity() }
-
-private fun RegionWithPokedexes.asCacheEntity(): RegionCache =
-    RegionCache(
-        id = this.region.id,
-        name = this.region.name,
-        pokedexes = this.pokedexes.asDomain(),
-        lastAccessed = this.region.lastFetched
+private fun RegionWithPokedexes.asDomain(): Region =
+    Region(
+        id = ID(this.region.id),
+        name = Name(this.region.name),
+        pokedexes = this.pokedexes.asDomain()
     )
 
 @JvmName("listPokedexEntityAsDomain")

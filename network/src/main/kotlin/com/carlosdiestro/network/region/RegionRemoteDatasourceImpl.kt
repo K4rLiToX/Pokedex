@@ -2,33 +2,56 @@ package com.carlosdiestro.network.region
 
 import androidx.core.net.toUri
 import com.carlosdiestro.core.region.data.RegionRemoteDatasource
+import com.carlosdiestro.core.region.data.SyncState
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
+import com.carlosdiestro.network.ApiResult
 import com.carlosdiestro.network.PokeApi
 import com.carlosdiestro.network.region.dtos.RegionDto
 import com.carlosdiestro.network.region.dtos.RegionsDto
 import com.carlosdiestro.network.region.dtos.SimplePokedexDto
 import com.carlosdiestro.network.region.dtos.SimpleRegionDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RegionRemoteDatasourceImpl @Inject constructor(
     private val api: PokeApi
 ) : RegionRemoteDatasource {
 
-    override suspend fun getPokemonRegions(): Result<List<SimpleRegion>> {
-        return api.getPokemonRegions().asDomain()
+    override suspend fun getPokemonRegions(eTag: String): SyncState<List<SimpleRegion>> {
+        return when (val result = api.getPokemonRegions(eTag)) {
+            is ApiResult.Success -> {
+                SyncState.Success(
+                    data = withContext(Dispatchers.Default) { result.data.asDomain() },
+                    expireDate = result.expireDate,
+                    eTag = result.eTag
+                )
+            }
+
+            ApiResult.RedirectException -> SyncState.NotModified
+            ApiResult.NoDataAvailable -> SyncState.NotAvailable
+        }
     }
 
-    override suspend fun getPokemonRegion(regionId: Int): Result<Region> {
-        return api.getPokemonRegion(regionId).asDomain()
+    override suspend fun getPokemonRegion(regionId: Int, eTag: String): SyncState<Region> {
+        return when (val result = api.getPokemonRegion(regionId, eTag)) {
+            is ApiResult.Success -> {
+                SyncState.Success(
+                    data = withContext(Dispatchers.Default) { result.data.asDomain() },
+                    expireDate = result.expireDate,
+                    eTag = result.eTag
+                )
+            }
+
+            ApiResult.RedirectException -> SyncState.NotModified
+            ApiResult.NoDataAvailable -> SyncState.NotAvailable
+        }
     }
 }
-
-private fun Result<RegionsDto>.asDomain(): Result<List<SimpleRegion>> =
-    this.mapCatching { regions -> regions.asDomain() }
 
 private fun RegionsDto.asDomain(): List<SimpleRegion> = this.region.asDomain()
 
@@ -38,10 +61,6 @@ private fun List<SimpleRegionDto>.asDomain(): List<SimpleRegion> = this.map { re
         name = Name(region.name)
     )
 }
-
-@JvmName("regionDtoAsDomain")
-private fun Result<RegionDto>.asDomain(): Result<Region> =
-    this.mapCatching(RegionDto::asDomain)
 
 private fun RegionDto.asDomain(): Region = Region(
     id = ID(this.id),

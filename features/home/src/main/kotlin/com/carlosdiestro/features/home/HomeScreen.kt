@@ -2,13 +2,16 @@ package com.carlosdiestro.features.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -63,7 +66,7 @@ private fun HomeScreen(
             MediumTopAppBar(
                 title = {
                     when (state) {
-                        is HomeUiState.Error -> {}
+                        is HomeUiState.DataNotAvailable -> Unit
                         HomeUiState.Loading -> {
                             Text(
                                 text = "..."
@@ -120,10 +123,7 @@ private fun HomeScreen(
                 .padding(contentPadding)
         ) {
             when (state) {
-                is HomeUiState.Error -> Error(
-                    message = state.message
-                )
-
+                is HomeUiState.DataNotAvailable -> DataNotAvailable()
                 HomeUiState.Loading -> Loading()
                 is HomeUiState.Success -> Success(
                     data = state.data
@@ -152,17 +152,22 @@ private fun Loading() {
 }
 
 @Composable
-private fun Error(
-    message: String?
-) {
+private fun DataNotAvailable() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Icon(
+            imageVector = Icons.Rounded.Warning,
+            contentDescription = "Error state icon",
+            modifier = Modifier
+                .size(48.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = message ?: "",
-            style = MaterialTheme.typography.headlineMedium
+            text = "Sorry, data is not currently available at the moment. Try again later",
+            style = MaterialTheme.typography.headlineSmall
         )
     }
 }

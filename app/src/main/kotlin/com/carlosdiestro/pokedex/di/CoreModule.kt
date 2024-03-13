@@ -1,5 +1,7 @@
 package com.carlosdiestro.pokedex.di
 
+import com.carlosdiestro.core.region.common.RequestRepository
+import com.carlosdiestro.core.region.common.RequestRepositoryImpl
 import com.carlosdiestro.core.region.data.RegionRepositoryImpl
 import com.carlosdiestro.core.region.domain.RegionRepository
 import dagger.Binds
@@ -15,4 +17,8 @@ interface CoreModule {
     @Singleton
     @Binds
     fun bindRegionRepository(impl: RegionRepositoryImpl): RegionRepository
+
+    @Singleton
+    @Binds
+    fun bindRequestRepository(impl: RequestRepositoryImpl): RequestRepository
 }

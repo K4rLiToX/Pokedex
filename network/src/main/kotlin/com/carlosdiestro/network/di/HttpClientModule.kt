@@ -1,5 +1,6 @@
 package com.carlosdiestro.network.di
 
+import com.carlosdiestro.network.ApiConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,8 +12,6 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
-
-private const val TimeOut = 10_000
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -27,12 +26,13 @@ internal object HttpClientModule {
                 json(Json {
                     isLenient = true
                     prettyPrint = true
+                    ignoreUnknownKeys = true
                 })
             }
             install(HttpCache)
             engine {
-                socketTimeout = TimeOut
-                connectTimeout = TimeOut
+                socketTimeout = ApiConstants.TIME_OUT
+                connectTimeout = ApiConstants.TIME_OUT
             }
         }
 }

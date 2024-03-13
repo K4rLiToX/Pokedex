@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.carlosdiestro.database.PokedexDatabase
 import com.carlosdiestro.database.pokedex.PokedexDao
 import com.carlosdiestro.database.region.RegionDao
+import com.carlosdiestro.database.requestMetadata.RequestMetadataDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +34,8 @@ internal object DatabaseModule {
     @Singleton
     @Provides
     fun providePokedexDao(db: PokedexDatabase): PokedexDao = db.pokedexDao()
+
+    @Singleton
+    @Provides
+    fun provideRequestMetadataDao(db: PokedexDatabase): RequestMetadataDao = db.requestMetadataDao()
 }

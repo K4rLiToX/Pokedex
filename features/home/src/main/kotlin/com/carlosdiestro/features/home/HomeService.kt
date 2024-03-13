@@ -1,54 +1,61 @@
 package com.carlosdiestro.features.home
 
-import com.carlosdiestro.core.region.data.DataResource
+import android.util.Log
+import com.carlosdiestro.core.region.data.SyncResult
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository
 import com.carlosdiestro.core.region.domain.SimpleRegion
 import com.carlosdiestro.features.home.models.UiResult
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
+private const val HomeServiceTag = "Home Service"
 
 internal class HomeService @Inject constructor(
     private val regionRepository: RegionRepository
 ) {
 
-    val regions: Flow<UiResult<List<SimpleRegion>>> = flow {
-        regionRepository.getPokemonRegions()
-            .onStart { emit(UiResult.Loading) }
-            .collect { resource ->
-                val result = when (resource) {
-                    is DataResource.Failure -> {
-                        resource.data?.let { regions ->
-                            if (regions.isNotEmpty()) UiResult.Success(regions)
-                            else UiResult.Failure(resource.exception)
-                        } ?: UiResult.Failure(resource.exception)
-                    }
+    fun observeRegions(): Flow<UiResult<List<SimpleRegion>, Nothing>> = regionRepository
+        .observePokemonRegions()
+        .map { regions ->
+            if (regions.isEmpty()) UiResult.Empty()
+            else UiResult.Success(regions)
+        }
+        .catch {
+            Log.e(
+                HomeServiceTag,
+                it.message,
+                it
+            )
+            UiResult.Failure()
+        }
 
-                    is DataResource.Success -> UiResult.Success(resource.data)
-                }
-                emit(result)
-            }
-    }
+    fun observeRegion(regionId: Int): Flow<UiResult<Region, Int>> = regionRepository
+        .observePokemonRegion(ID(regionId))
+        .map { region ->
+            region?.let {
+                if (region.pokedexes.isNotEmpty()) UiResult.Success(it)
+                else UiResult.Empty(regionId)
+            } ?: UiResult.Empty(regionId)
+        }
+        .catch {
+            Log.e(
+                HomeServiceTag,
+                it.message,
+                it
+            )
+            UiResult.Failure()
+        }
+
+    suspend fun synchronizePokemonRegions(): SyncResult =
+        regionRepository.synchronizePokemonRegions()
+
+    suspend fun synchronizePokemonRegion(regionId: Int): SyncResult =
+        regionRepository.synchronizePokemonRegion(ID(regionId))
 
     val defaultRegionId: Flow<Int> = flowOf(1)
-    fun getRegion(regionId: Int): Flow<UiResult<Region?>> = flow {
-        regionRepository.getPokemonRegion(ID(regionId))
-            .onStart { emit(UiResult.Loading) }
-            .collect { resource ->
-                val result = when (resource) {
-                    is DataResource.Failure -> {
-                        resource.data?.let { region ->
-                            UiResult.Success(region)
-                        } ?: UiResult.Failure(resource.exception)
-                    }
-
-                    is DataResource.Success -> UiResult.Success(resource.data)
-                }
-                emit(result)
-            }
-    }
 }

@@ -8,5 +8,5 @@ interface RegionLocalDatasource {
     suspend fun upsert(regions: List<SimpleRegion>)
     suspend fun upsert(region: Region)
     fun getAll(): Flow<List<SimpleRegion>>
-    fun getRegion(regionId: Int): Flow<RegionCache?>
+    fun getRegion(regionId: Int): Flow<Region?>
 }

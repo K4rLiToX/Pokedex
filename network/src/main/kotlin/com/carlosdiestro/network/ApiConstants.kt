@@ -1,15 +1,16 @@
 package com.carlosdiestro.network
 
-private const val BaseUrl = "https://pokeapi.co/api/v2/"
-
 internal object ApiRoutes {
-    const val Regions = "$BaseUrl/region"
-    const val Region = "$Regions/{${ApiUrlParameters.RegionId}}"
-    const val Pokedex = "$BaseUrl/pokedex/"
-    const val Pokemon = "$BaseUrl/pokemon/"
-    const val PokemonSpecies = "$BaseUrl/pokemon-species/"
+    private const val BASE_URL = "https://pokeapi.co/api/v2"
+    const val REGIONS = "$BASE_URL/region"
 }
 
-internal object ApiUrlParameters {
-    const val RegionId: String = "regionId"
+internal object ApiHeadersKeys {
+    const val IF_NONE_MATCH = "If-None-Match"
+    const val CACHE_CONTROL = "Cache-Control"
+}
+
+internal object ApiConstants {
+    const val DEFAULT_REQUEST_MAX_AGE = 86400L
+    const val TIME_OUT = 10_000
 }
