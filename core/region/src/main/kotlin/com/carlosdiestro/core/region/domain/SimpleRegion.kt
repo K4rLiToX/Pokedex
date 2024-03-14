@@ -2,7 +2,7 @@ package com.carlosdiestro.core.region.domain
 
 data class SimpleRegion(
     val id: ID,
-    val name: Name
+    val name: Name,
 )
 
 @JvmInline

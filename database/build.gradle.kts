@@ -37,7 +37,10 @@ android {
         schemaDirectory(path = "$projectDir/schemas")
     }
     ksp {
-        arg("room.generateKotlin", "true")
+        arg(
+            "room.generateKotlin",
+            "true"
+        )
     }
 }
 

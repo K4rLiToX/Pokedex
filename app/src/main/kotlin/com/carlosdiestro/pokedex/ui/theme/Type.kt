@@ -9,8 +9,14 @@ import androidx.compose.ui.unit.sp
 import com.carlosdiestro.pokedex.R
 
 private val azeretMonoFamily = FontFamily(
-    Font(R.font.azeret_mono_regular, FontWeight.Normal),
-    Font(R.font.azeret_mono_medium, FontWeight.Medium)
+    Font(
+        R.font.azeret_mono_regular,
+        FontWeight.Normal
+    ),
+    Font(
+        R.font.azeret_mono_medium,
+        FontWeight.Medium
+    )
 )
 
 // Set of Material typography styles to start with

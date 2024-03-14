@@ -11,14 +11,17 @@ import javax.inject.Inject
 internal const val PokeApiTag = "PokeApi"
 
 internal class PokeApi @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
 ) {
 
     suspend fun getPokemonRegions(eTag: String): ApiResult<RegionsDto> =
         suspendRunCatching {
             client.get(ApiRoutes.REGIONS) {
                 if (eTag.isNotEmpty()) {
-                    header(key = ApiHeadersKeys.IF_NONE_MATCH, value = eTag)
+                    header(
+                        key = ApiHeadersKeys.IF_NONE_MATCH,
+                        value = eTag
+                    )
                 }
             }
         }
@@ -27,7 +30,10 @@ internal class PokeApi @Inject constructor(
         suspendRunCatching {
             client.get(ApiRoutes.REGIONS) {
                 if (eTag.isNotEmpty()) {
-                    header(key = ApiHeadersKeys.IF_NONE_MATCH, value = eTag)
+                    header(
+                        key = ApiHeadersKeys.IF_NONE_MATCH,
+                        value = eTag
+                    )
                 }
                 url {
                     it.appendPathSegments(regionId.toString())

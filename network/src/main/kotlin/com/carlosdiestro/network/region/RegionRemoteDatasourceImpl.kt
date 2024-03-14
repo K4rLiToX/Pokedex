@@ -19,12 +19,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RegionRemoteDatasourceImpl @Inject constructor(
-    private val api: PokeApi
+    private val api: PokeApi,
 ) : RegionRemoteDatasource {
 
     override suspend fun getPokemonRegions(eTag: String): SyncState<List<SimpleRegion>> {
         return when (val result = api.getPokemonRegions(eTag)) {
-            is ApiResult.Success -> {
+            is ApiResult.Success        -> {
                 SyncState.Success(
                     data = withContext(Dispatchers.Default) { result.data.asDomain() },
                     expireDate = result.expireDate,
@@ -33,13 +33,13 @@ internal class RegionRemoteDatasourceImpl @Inject constructor(
             }
 
             ApiResult.RedirectException -> SyncState.NotModified
-            ApiResult.NoDataAvailable -> SyncState.NotAvailable
+            ApiResult.NoDataAvailable   -> SyncState.NotAvailable
         }
     }
 
     override suspend fun getPokemonRegion(regionId: Int, eTag: String): SyncState<Region> {
         return when (val result = api.getPokemonRegion(regionId, eTag)) {
-            is ApiResult.Success -> {
+            is ApiResult.Success        -> {
                 SyncState.Success(
                     data = withContext(Dispatchers.Default) { result.data.asDomain() },
                     expireDate = result.expireDate,
@@ -48,7 +48,7 @@ internal class RegionRemoteDatasourceImpl @Inject constructor(
             }
 
             ApiResult.RedirectException -> SyncState.NotModified
-            ApiResult.NoDataAvailable -> SyncState.NotAvailable
+            ApiResult.NoDataAvailable   -> SyncState.NotAvailable
         }
     }
 }

@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
-    private val service: HomeService
+    private val service: HomeService,
 ) : ViewModel() {
 
     private var _currentRegion: MutableStateFlow<RegionPlo?> = MutableStateFlow(null)
@@ -36,12 +36,12 @@ internal class HomeViewModel @Inject constructor(
     ).flatMapLatest(service::observeRegion)
         .map { result ->
             when (result) {
-                UiResult.Loading -> HomeUiState.Loading
-                is UiResult.Empty -> {
+                UiResult.Loading    -> HomeUiState.Loading
+                is UiResult.Empty   -> {
                     val syncResult = service.synchronizePokemonRegion(result.extra!!)
                     when (syncResult) {
                         SyncResult.Success, SyncResult.NotNecessary -> HomeUiState.Loading
-                        SyncResult.Error -> HomeUiState.DataNotAvailable
+                        SyncResult.Error                            -> HomeUiState.DataNotAvailable
                     }
                 }
 
@@ -64,12 +64,12 @@ internal class HomeViewModel @Inject constructor(
     val regionsState: StateFlow<RegionsUiState> = service.observeRegions()
         .map { result ->
             when (result) {
-                UiResult.Loading -> RegionsUiState.Loading
-                is UiResult.Empty -> {
+                UiResult.Loading    -> RegionsUiState.Loading
+                is UiResult.Empty   -> {
                     val syncResult = service.synchronizePokemonRegions()
                     when (syncResult) {
                         SyncResult.Success, SyncResult.NotNecessary -> RegionsUiState.Loading
-                        SyncResult.Error -> RegionsUiState.DataNotAvailable
+                        SyncResult.Error                            -> RegionsUiState.DataNotAvailable
                     }
                 }
 

@@ -11,5 +11,5 @@ data class RegionWithPokedexes(
         parentColumn = "id",
         entityColumn = "regionId"
     )
-    val pokedexes: List<PokedexEntity>
+    val pokedexes: List<PokedexEntity>,
 )

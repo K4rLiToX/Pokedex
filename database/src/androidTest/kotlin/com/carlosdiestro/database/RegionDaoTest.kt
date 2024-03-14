@@ -83,7 +83,10 @@ class RegionDaoTest {
             val regions = regionDao.getAll().first()
 
             // then
-            assertEquals(regions, newRegions)
+            assertEquals(
+                regions,
+                newRegions
+            )
         }
 
     @Test

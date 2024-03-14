@@ -12,5 +12,5 @@ data class RegionsDto(
     @SerialName("previous")
     val previous: String?,
     @SerialName("results")
-    val region: List<SimpleRegionDto>
+    val region: List<SimpleRegionDto>,
 )

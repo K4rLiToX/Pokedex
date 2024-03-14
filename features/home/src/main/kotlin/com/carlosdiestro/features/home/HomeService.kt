@@ -16,7 +16,7 @@ import javax.inject.Inject
 private const val HomeServiceTag = "Home Service"
 
 internal class HomeService @Inject constructor(
-    private val regionRepository: RegionRepository
+    private val regionRepository: RegionRepository,
 ) {
 
     fun observeRegions(): Flow<UiResult<List<SimpleRegion>, Nothing>> = regionRepository

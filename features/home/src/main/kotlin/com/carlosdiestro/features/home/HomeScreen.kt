@@ -41,7 +41,7 @@ import com.carlosdiestro.features.home.models.RegionPlo
 
 @Composable
 internal fun HomeRoute(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val regionsState by viewModel.regionsState.collectAsStateWithLifecycle()
@@ -57,7 +57,7 @@ internal fun HomeRoute(
 private fun HomeScreen(
     state: HomeUiState,
     regionsState: RegionsUiState,
-    onRegionClick: (RegionPlo) -> Unit
+    onRegionClick: (RegionPlo) -> Unit,
 ) {
     val regionsDialogState = rememberRegionsDialogState()
 
@@ -67,13 +67,13 @@ private fun HomeScreen(
                 title = {
                     when (state) {
                         is HomeUiState.DataNotAvailable -> Unit
-                        HomeUiState.Loading -> {
+                        HomeUiState.Loading             -> {
                             Text(
                                 text = "..."
                             )
                         }
 
-                        is HomeUiState.Success -> {
+                        is HomeUiState.Success          -> {
                             state.data.currentRegion?.name?.let {
                                 Text(
                                     text = it
@@ -124,8 +124,8 @@ private fun HomeScreen(
         ) {
             when (state) {
                 is HomeUiState.DataNotAvailable -> DataNotAvailable()
-                HomeUiState.Loading -> Loading()
-                is HomeUiState.Success -> Success(
+                HomeUiState.Loading             -> Loading()
+                is HomeUiState.Success          -> Success(
                     data = state.data
                 )
             }
@@ -175,7 +175,7 @@ private fun DataNotAvailable() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Success(
-    data: HomeState
+    data: HomeState,
 ) {
     val onlyOnePokedex = data.currentRegionPokedexes.size == 1
     if (onlyOnePokedex) {

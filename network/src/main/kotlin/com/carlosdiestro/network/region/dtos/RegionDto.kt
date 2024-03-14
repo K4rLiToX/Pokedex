@@ -10,5 +10,5 @@ data class RegionDto(
     @SerialName("name")
     val name: String,
     @SerialName("pokedexes")
-    val pokedexes: List<SimplePokedexDto>
+    val pokedexes: List<SimplePokedexDto>,
 )

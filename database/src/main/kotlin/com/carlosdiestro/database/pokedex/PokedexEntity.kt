@@ -8,5 +8,5 @@ data class PokedexEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val regionId: Int,
-    val name: String
+    val name: String,
 )

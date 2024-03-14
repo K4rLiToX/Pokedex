@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RequestLocalDatasourceImpl @Inject constructor(
-    private val dao: RequestMetadataDao
+    private val dao: RequestMetadataDao,
 ) : RequestLocalDatasource {
 
     override suspend fun upsert(requestMetadata: RequestMetadata) =

@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 internal class RegionLocalDatasourceImpl @Inject constructor(
     private val regionDao: RegionDao,
-    private val pokedexDao: PokedexDao
+    private val pokedexDao: PokedexDao,
 ) : RegionLocalDatasource {
 
     override suspend fun upsert(regions: List<SimpleRegion>) = regionDao.upsert(
@@ -71,7 +71,10 @@ private fun List<SimplePokedex>.asEntity(): List<PokedexEntity> = this.map(Simpl
 private fun SimplePokedex.asEntity(): PokedexEntity = PokedexEntity(
     id = this.id.id,
     regionId = this.regionId.id,
-    name = this.name.name.replace("-", " ").replaceFirstChar { it.uppercase() }
+    name = this.name.name.replace(
+        "-",
+        " "
+    ).replaceFirstChar { it.uppercase() }
 )
 
 private fun RegionWithPokedexes.asDomain(): Region =

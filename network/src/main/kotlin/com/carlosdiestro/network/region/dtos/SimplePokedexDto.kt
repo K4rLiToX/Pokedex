@@ -8,5 +8,5 @@ data class SimplePokedexDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )

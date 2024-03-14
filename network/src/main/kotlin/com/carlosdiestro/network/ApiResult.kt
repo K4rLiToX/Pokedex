@@ -10,7 +10,7 @@ internal sealed interface ApiResult<out T> {
     data class Success<T>(
         val data: T,
         val expireDate: Long,
-        val eTag: String
+        val eTag: String,
     ) : ApiResult<T>
 
     data object RedirectException : ApiResult<Nothing>
@@ -19,7 +19,7 @@ internal sealed interface ApiResult<out T> {
 }
 
 internal suspend inline fun <reified T> suspendRunCatching(
-    request: () -> HttpResponse
+    request: () -> HttpResponse,
 ): ApiResult<T> =
     try {
         val response = request()
@@ -31,7 +31,11 @@ internal suspend inline fun <reified T> suspendRunCatching(
     } catch (e: RedirectResponseException) {
         ApiResult.RedirectException
     } catch (e: Exception) {
-        Log.e(PokeApiTag, e.localizedMessage, e)
+        Log.e(
+            PokeApiTag,
+            e.localizedMessage,
+            e
+        )
         ApiResult.NoDataAvailable
     }
 

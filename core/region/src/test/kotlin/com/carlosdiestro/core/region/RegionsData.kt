@@ -5,6 +5,7 @@ import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.SimpleRegion
 
 object RegionsData {
+
     val regions: List<SimpleRegion> = listOf(
         SimpleRegion(
             id = ID(1),

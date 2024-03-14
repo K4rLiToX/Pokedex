@@ -40,6 +40,7 @@ internal fun rememberRegionsDialogState(): RegionsDialogState = remember {
 
 @Stable
 class RegionsDialogState {
+
     var canOpenRegionsDialog by mutableStateOf(false)
 
     fun openRegionsDialog() {
@@ -57,7 +58,7 @@ internal fun RegionsDialog(
     regionsState: RegionsUiState,
     onDismiss: () -> Unit,
     onRegionClick: (RegionPlo) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (dialogState.canOpenRegionsDialog) {
         AlertDialog(
@@ -70,9 +71,9 @@ internal fun RegionsDialog(
                 when (regionsState) {
                     is RegionsUiState.DataNotAvailable -> DataNotAvailable()
 
-                    RegionsUiState.Loading -> Loading()
+                    RegionsUiState.Loading             -> Loading()
 
-                    is RegionsUiState.Success -> RegionList(
+                    is RegionsUiState.Success          -> RegionList(
                         regions = regionsState.regions,
                         onDismiss = onDismiss,
                         onRegionClick = onRegionClick
@@ -89,7 +90,7 @@ private fun RegionList(
     regions: List<RegionPlo>,
     onDismiss: () -> Unit,
     onRegionClick: (RegionPlo) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -115,7 +116,7 @@ private fun RegionList(
 private fun RegionItem(
     region: RegionPlo,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -154,7 +155,10 @@ private fun DataNotAvailable() {
         modifier = Modifier
             .wrapContentSize()
     ) {
-        Icon(imageVector = Icons.Rounded.Warning, contentDescription = "Error state icon")
+        Icon(
+            imageVector = Icons.Rounded.Warning,
+            contentDescription = "Error state icon"
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Sorry, data is not available at the moment, try again later")
     }

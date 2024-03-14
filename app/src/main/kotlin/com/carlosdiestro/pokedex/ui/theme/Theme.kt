@@ -243,11 +243,11 @@ private val highContrastDarkColorScheme = darkColorScheme(
 @Composable
 fun PokedexTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         darkTheme -> darkScheme
-        else -> lightScheme
+        else      -> lightScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -255,7 +255,10 @@ fun PokedexTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(
+                window,
+                view
+            ).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

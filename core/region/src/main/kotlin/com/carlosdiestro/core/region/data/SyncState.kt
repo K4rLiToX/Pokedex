@@ -4,7 +4,7 @@ sealed interface SyncState<out T> {
     data class Success<T>(
         val data: T,
         val expireDate: Long,
-        val eTag: String
+        val eTag: String,
     ) : SyncState<T>
 
     data object NotModified : SyncState<Nothing>

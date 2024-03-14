@@ -11,7 +11,7 @@ import com.carlosdiestro.features.home.homeScreen
 
 @Composable
 fun PokedexApp(
-    appState: PokedexAppState = rememberPokedexAppState()
+    appState: PokedexAppState = rememberPokedexAppState(),
 ) {
     Scaffold { contentPadding ->
         PokedexNavHost(
@@ -26,7 +26,7 @@ fun PokedexApp(
 @Composable
 fun PokedexNavHost(
     appState: PokedexAppState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = appState.navController,

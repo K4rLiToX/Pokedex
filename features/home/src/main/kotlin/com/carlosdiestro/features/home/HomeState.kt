@@ -11,7 +11,7 @@ internal sealed interface HomeUiState {
 
 internal data class HomeState(
     val currentRegion: RegionPlo?,
-    val currentRegionPokedexes: List<PokedexPlo>
+    val currentRegionPokedexes: List<PokedexPlo>,
 )
 
 internal sealed interface RegionsUiState {

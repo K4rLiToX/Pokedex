@@ -8,5 +8,5 @@ data class RequestMetadataEntity(
     @PrimaryKey(autoGenerate = false)
     val route: String,
     val expireDate: Long,
-    val eTag: String
+    val eTag: String,
 )

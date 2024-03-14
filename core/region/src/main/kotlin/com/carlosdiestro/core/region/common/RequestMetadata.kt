@@ -3,8 +3,9 @@ package com.carlosdiestro.core.region.common
 data class RequestMetadata(
     val route: Route,
     val expireDate: ExpireDate,
-    val eTag: ETag
+    val eTag: ETag,
 ) {
+
     val isExpired: Boolean
         get() = expireDate.expireDate >= System.currentTimeMillis()
 }

@@ -19,7 +19,7 @@ import javax.inject.Inject
 class RegionRepositoryImpl @Inject constructor(
     private val remote: RegionRemoteDatasource,
     private val local: RegionLocalDatasource,
-    private val requestRepository: RequestRepository
+    private val requestRepository: RequestRepository,
 ) : RegionRepository {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -89,7 +89,10 @@ class RegionRepositoryImpl @Inject constructor(
             } else {
                 if (!requestMetadata.isExpired) SyncResult.NotNecessary
                 else {
-                    remote.getPokemonRegion(regionId.id, requestMetadata.eTag.eTag)
+                    remote.getPokemonRegion(
+                        regionId.id,
+                        requestMetadata.eTag.eTag
+                    )
                         .asSyncResult(
                             cache = local::upsert,
                             updateRequestMetadata = { expireDate, eTag ->
@@ -109,16 +112,19 @@ class RegionRepositoryImpl @Inject constructor(
 
 private suspend inline fun <T> SyncState<T>.asSyncResult(
     crossinline cache: suspend (T) -> Unit,
-    crossinline updateRequestMetadata: suspend (ExpireDate, ETag) -> Unit
+    crossinline updateRequestMetadata: suspend (ExpireDate, ETag) -> Unit,
 ): SyncResult {
     return when (this) {
-        is SyncState.Success -> {
+        is SyncState.Success   -> {
             cache(this.data)
-            updateRequestMetadata(ExpireDate(this.expireDate), ETag(this.eTag))
+            updateRequestMetadata(
+                ExpireDate(this.expireDate),
+                ETag(this.eTag)
+            )
             SyncResult.Success
         }
 
-        SyncState.NotModified -> SyncResult.NotNecessary
+        SyncState.NotModified  -> SyncResult.NotNecessary
         SyncState.NotAvailable -> SyncResult.Error
     }
 }

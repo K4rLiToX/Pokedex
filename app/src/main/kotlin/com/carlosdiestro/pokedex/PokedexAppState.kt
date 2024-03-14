@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun rememberPokedexAppState(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ): PokedexAppState = remember(
     navController
 ) {
@@ -19,5 +19,5 @@ fun rememberPokedexAppState(
 
 @Stable
 class PokedexAppState(
-    val navController: NavHostController
+    val navController: NavHostController,
 )

@@ -19,6 +19,7 @@ import com.carlosdiestro.database.requestMetadata.RequestMetadataEntity
     exportSchema = false
 )
 internal abstract class PokedexDatabase : RoomDatabase() {
+
     abstract fun regionDao(): RegionDao
     abstract fun pokedexDao(): PokedexDao
     abstract fun requestMetadataDao(): RequestMetadataDao
