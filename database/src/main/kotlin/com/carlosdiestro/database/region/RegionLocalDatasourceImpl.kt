@@ -8,10 +8,8 @@ import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
 import com.carlosdiestro.database.pokedex.PokedexDao
 import com.carlosdiestro.database.pokedex.PokedexEntity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RegionLocalDatasourceImpl @Inject constructor(
@@ -19,28 +17,18 @@ internal class RegionLocalDatasourceImpl @Inject constructor(
     private val pokedexDao: PokedexDao,
 ) : RegionLocalDatasource {
 
-    override suspend fun upsert(regions: List<SimpleRegion>) = regionDao.upsert(
-        withContext(Dispatchers.Default) { regions.asEntity() }
-    )
+    override suspend fun upsert(regions: List<SimpleRegion>) = regionDao.upsert(regions.asEntity())
 
     override suspend fun upsert(region: Region) {
-        regionDao.upsert(
-            withContext(Dispatchers.Default) { region.asEntity() }
-        )
-        pokedexDao.upsert(
-            withContext(Dispatchers.Default) { region.pokedexes.asEntity() }
-        )
+        regionDao.upsert(region.asEntity())
+        pokedexDao.upsert(region.pokedexes.asEntity())
     }
 
     override fun getAll(): Flow<List<SimpleRegion>> =
-        regionDao.getAll().map {
-            withContext(Dispatchers.Default) { it.asDomain() }
-        }
+        regionDao.getAll().map(List<RegionEntity>::asDomain)
 
     override fun getRegion(regionId: Int): Flow<Region?> =
-        regionDao.getRegion(regionId).map {
-            withContext(Dispatchers.Default) { it?.asDomain() }
-        }
+        regionDao.getRegion(regionId).map { it?.asDomain() }
 }
 
 private fun List<RegionEntity>.asDomain(): List<SimpleRegion> =

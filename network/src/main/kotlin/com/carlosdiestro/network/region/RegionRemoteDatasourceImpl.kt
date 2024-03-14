@@ -14,8 +14,6 @@ import com.carlosdiestro.network.region.dtos.RegionDto
 import com.carlosdiestro.network.region.dtos.RegionsDto
 import com.carlosdiestro.network.region.dtos.SimplePokedexDto
 import com.carlosdiestro.network.region.dtos.SimpleRegionDto
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RegionRemoteDatasourceImpl @Inject constructor(
@@ -26,7 +24,7 @@ internal class RegionRemoteDatasourceImpl @Inject constructor(
         return when (val result = api.getPokemonRegions(eTag)) {
             is ApiResult.Success        -> {
                 SyncState.Success(
-                    data = withContext(Dispatchers.Default) { result.data.asDomain() },
+                    data = result.data.asDomain(),
                     expireDate = result.expireDate,
                     eTag = result.eTag
                 )
@@ -41,7 +39,7 @@ internal class RegionRemoteDatasourceImpl @Inject constructor(
         return when (val result = api.getPokemonRegion(regionId, eTag)) {
             is ApiResult.Success        -> {
                 SyncState.Success(
-                    data = withContext(Dispatchers.Default) { result.data.asDomain() },
+                    data = result.data.asDomain(),
                     expireDate = result.expireDate,
                     eTag = result.eTag
                 )

@@ -5,8 +5,6 @@ import com.carlosdiestro.core.region.common.ExpireDate
 import com.carlosdiestro.core.region.common.RequestLocalDatasource
 import com.carlosdiestro.core.region.common.RequestMetadata
 import com.carlosdiestro.core.region.common.Route
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RequestLocalDatasourceImpl @Inject constructor(
@@ -14,14 +12,10 @@ internal class RequestLocalDatasourceImpl @Inject constructor(
 ) : RequestLocalDatasource {
 
     override suspend fun upsert(requestMetadata: RequestMetadata) =
-        dao.upsert(
-            withContext(Dispatchers.Default) { requestMetadata.asEntity() }
-        )
+        dao.upsert(requestMetadata.asEntity())
 
     override suspend fun getRequest(route: Route): RequestMetadata? =
-        dao.getRequest(route.route)?.let {
-            withContext(Dispatchers.Default) { it.asDomain() }
-        }
+        dao.getRequest(route.route)?.asDomain()
 }
 
 private fun RequestMetadata.asEntity(): RequestMetadataEntity = RequestMetadataEntity(
