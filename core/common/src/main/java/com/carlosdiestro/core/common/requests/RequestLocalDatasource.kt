@@ -1,4 +1,4 @@
-package com.carlosdiestro.core.region.common
+package com.carlosdiestro.core.common.requests
 
 interface RequestLocalDatasource {
 

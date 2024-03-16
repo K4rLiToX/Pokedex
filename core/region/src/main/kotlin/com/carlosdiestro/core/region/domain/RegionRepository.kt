@@ -1,6 +1,6 @@
 package com.carlosdiestro.core.region.domain
 
-import com.carlosdiestro.core.region.data.SyncResult
+import com.carlosdiestro.core.common.models.SyncResult
 import kotlinx.coroutines.flow.Flow
 
 interface RegionRepository {

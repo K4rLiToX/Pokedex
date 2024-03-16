@@ -1,4 +1,4 @@
-package com.carlosdiestro.core.region.data
+package com.carlosdiestro.core.common.models
 
 sealed interface SyncState<out T> {
     data class Success<T>(

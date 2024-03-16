@@ -1,5 +1,6 @@
 package com.carlosdiestro.core.region.data
 
+import com.carlosdiestro.core.common.models.SyncState
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimpleRegion
 

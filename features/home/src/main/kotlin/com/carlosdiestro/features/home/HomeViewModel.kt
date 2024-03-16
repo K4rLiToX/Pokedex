@@ -2,7 +2,7 @@ package com.carlosdiestro.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carlosdiestro.core.region.data.SyncResult
+import com.carlosdiestro.core.common.models.SyncResult
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion

@@ -1,7 +1,7 @@
 package com.carlosdiestro.features.home
 
 import android.util.Log
-import com.carlosdiestro.core.region.data.SyncResult
+import com.carlosdiestro.core.common.models.SyncResult
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository

@@ -1,6 +1,6 @@
 package com.carlosdiestro.database.di
 
-import com.carlosdiestro.core.region.common.RequestLocalDatasource
+import com.carlosdiestro.core.common.requests.RequestLocalDatasource
 import com.carlosdiestro.core.region.data.RegionLocalDatasource
 import com.carlosdiestro.database.region.RegionLocalDatasourceImpl
 import com.carlosdiestro.database.requestMetadata.RequestLocalDatasourceImpl
@@ -20,5 +20,5 @@ internal interface LocalDatasourceModule {
 
     @Singleton
     @Binds
-    fun bindRequestMetadataLocalDatasource(impl: RequestLocalDatasourceImpl): RequestLocalDatasource
+    fun bindRequestMetadataLocalDatasource(impl: RequestLocalDatasourceImpl): com.carlosdiestro.core.common.requests.RequestLocalDatasource
 }

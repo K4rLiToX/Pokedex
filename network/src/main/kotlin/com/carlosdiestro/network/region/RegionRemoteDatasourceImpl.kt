@@ -1,8 +1,8 @@
 package com.carlosdiestro.network.region
 
 import androidx.core.net.toUri
+import com.carlosdiestro.core.common.models.SyncState
 import com.carlosdiestro.core.region.data.RegionRemoteDatasource
-import com.carlosdiestro.core.region.data.SyncState
 import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.Region
