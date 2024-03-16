@@ -54,6 +54,7 @@ android {
 dependencies {
     implementation(project(":features:home"))
     implementation(project(":core:region"))
+    implementation(project(":core:pokedex"))
     implementation(project(":core:common"))
     implementation(project(":network"))
     implementation(project(":database"))

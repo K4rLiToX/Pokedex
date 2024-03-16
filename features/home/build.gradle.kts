@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation(project(":core:region"))
+    implementation(project(":core:pokedex"))
     implementation(project(":core:common"))
 
     implementation("androidx.core:core-ktx:1.12.0")
