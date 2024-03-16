@@ -1,6 +1,8 @@
 package com.carlosdiestro.network.di
 
+import com.carlosdiestro.core.pokedex.data.PokedexRemoteDatasource
 import com.carlosdiestro.core.region.data.RegionRemoteDatasource
+import com.carlosdiestro.network.pokedex.PokedexRemoteDatasourceImpl
 import com.carlosdiestro.network.region.RegionRemoteDatasourceImpl
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,8 @@ internal interface RemoteDatasourceModule {
     @Singleton
     @Binds
     fun bindRegionRemoteDatasource(impl: RegionRemoteDatasourceImpl): RegionRemoteDatasource
+
+    @Singleton
+    @Binds
+    fun bindPokedexRemoteDatasource(impl: PokedexRemoteDatasourceImpl): PokedexRemoteDatasource
 }

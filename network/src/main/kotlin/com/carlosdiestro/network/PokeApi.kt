@@ -1,5 +1,6 @@
 package com.carlosdiestro.network
 
+import com.carlosdiestro.network.pokedex.dto.PokedexDto
 import com.carlosdiestro.network.region.dtos.RegionDto
 import com.carlosdiestro.network.region.dtos.RegionsDto
 import io.ktor.client.HttpClient
@@ -26,7 +27,7 @@ internal class PokeApi @Inject constructor(
             }
         }
 
-    suspend fun getPokemonRegion(regionId: Int, eTag: String = ""): ApiResult<RegionDto> =
+    suspend fun getPokemonRegion(regionId: Int, eTag: String): ApiResult<RegionDto> =
         suspendRunCatching {
             client.get(ApiRoutes.REGIONS) {
                 if (eTag.isNotEmpty()) {
@@ -37,6 +38,21 @@ internal class PokeApi @Inject constructor(
                 }
                 url {
                     it.appendPathSegments(regionId.toString())
+                }
+            }
+        }
+
+    suspend fun getPokedexEntries(pokedexId: Int, eTag: String): ApiResult<PokedexDto> =
+        suspendRunCatching {
+            client.get(ApiRoutes.POKEDEXES) {
+                if (eTag.isNotEmpty()) {
+                    header(
+                        key = ApiHeadersKeys.IF_NONE_MATCH,
+                        value = eTag
+                    )
+                }
+                url {
+                    it.appendPathSegments(pokedexId.toString())
                 }
             }
         }

@@ -4,6 +4,7 @@ internal object ApiRoutes {
 
     private const val BASE_URL = "https://pokeapi.co/api/v2"
     const val REGIONS = "$BASE_URL/region"
+    const val POKEDEXES = "$BASE_URL/pokedex"
 }
 
 internal object ApiHeadersKeys {
