@@ -2,9 +2,7 @@ package com.carlosdiestro.core.region.data
 
 import com.carlosdiestro.core.common.models.ID
 import com.carlosdiestro.core.common.models.SyncResult
-import com.carlosdiestro.core.common.models.SyncState
-import com.carlosdiestro.core.common.requests.ETag
-import com.carlosdiestro.core.common.requests.ExpireDate
+import com.carlosdiestro.core.common.models.asSyncResult
 import com.carlosdiestro.core.common.requests.RequestMetadata
 import com.carlosdiestro.core.common.requests.RequestRepository
 import com.carlosdiestro.core.common.requests.Route
@@ -109,24 +107,5 @@ class RegionRepositoryImpl @Inject constructor(
                 }
             }
         }.await()
-    }
-}
-
-private suspend inline fun <T> SyncState<T>.asSyncResult(
-    crossinline cache: suspend (T) -> Unit,
-    crossinline updateRequestMetadata: suspend (ExpireDate, ETag) -> Unit,
-): SyncResult {
-    return when (this) {
-        is SyncState.Success   -> {
-            cache(this.data)
-            updateRequestMetadata(
-                ExpireDate(this.expireDate),
-                ETag(this.eTag)
-            )
-            SyncResult.Success
-        }
-
-        SyncState.NotModified  -> SyncResult.NotNecessary
-        SyncState.NotAvailable -> SyncResult.Error
     }
 }
