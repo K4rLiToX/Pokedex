@@ -1,5 +1,6 @@
 package com.carlosdiestro.core.region.data
 
+import com.carlosdiestro.core.common.models.ID
 import com.carlosdiestro.core.common.models.SyncResult
 import com.carlosdiestro.core.common.models.SyncState
 import com.carlosdiestro.core.common.requests.ETag
@@ -7,7 +8,6 @@ import com.carlosdiestro.core.common.requests.ExpireDate
 import com.carlosdiestro.core.common.requests.RequestMetadata
 import com.carlosdiestro.core.common.requests.RequestRepository
 import com.carlosdiestro.core.common.requests.Route
-import com.carlosdiestro.core.region.domain.ID
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository
 import com.carlosdiestro.core.region.domain.SimpleRegion

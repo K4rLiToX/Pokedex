@@ -1,5 +1,6 @@
 package com.carlosdiestro.core.region.domain
 
+import com.carlosdiestro.core.common.models.ID
 import com.carlosdiestro.core.common.models.SyncResult
 import kotlinx.coroutines.flow.Flow
 
