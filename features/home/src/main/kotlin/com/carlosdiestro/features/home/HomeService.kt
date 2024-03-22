@@ -1,8 +1,10 @@
 package com.carlosdiestro.features.home
 
 import android.util.Log
+import com.carlosdiestro.core.common.models.ID
 import com.carlosdiestro.core.common.models.SyncResult
-import com.carlosdiestro.core.region.domain.ID
+import com.carlosdiestro.core.pokedex.domain.PokedexRepository
+import com.carlosdiestro.core.pokedex.domain.SimplePokemon
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.RegionRepository
 import com.carlosdiestro.core.region.domain.SimpleRegion
@@ -17,6 +19,7 @@ private const val HomeServiceTag = "Home Service"
 
 internal class HomeService @Inject constructor(
     private val regionRepository: RegionRepository,
+    private val pokedexRepository: PokedexRepository,
 ) {
 
     fun observeRegions(): Flow<UiResult<List<SimpleRegion>, Nothing>> = regionRepository
@@ -51,11 +54,30 @@ internal class HomeService @Inject constructor(
             UiResult.Failure()
         }
 
+    fun observePokedex(pokedexId: Int): Flow<UiResult<List<SimplePokemon>, Int>> =
+        pokedexRepository.observePokedexEntries(ID(pokedexId))
+            .map { pokemons ->
+                if (pokemons.isEmpty()) UiResult.Empty(pokedexId)
+                else UiResult.Success(pokemons)
+
+            }
+            .catch {
+                Log.e(
+                    HomeServiceTag,
+                    it.message,
+                    it
+                )
+                UiResult.Failure()
+            }
+
     suspend fun synchronizePokemonRegions(): SyncResult =
         regionRepository.synchronizePokemonRegions()
 
     suspend fun synchronizePokemonRegion(regionId: Int): SyncResult =
         regionRepository.synchronizePokemonRegion(ID(regionId))
+
+    suspend fun synchronizePokedex(pokedexId: Int): SyncResult =
+        pokedexRepository.synchronizePokemonEntries(ID(pokedexId))
 
     val defaultRegionId: Flow<Int> = flowOf(1)
 }

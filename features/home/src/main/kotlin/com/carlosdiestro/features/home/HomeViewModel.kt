@@ -3,10 +3,12 @@ package com.carlosdiestro.features.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carlosdiestro.core.common.models.SyncResult
+import com.carlosdiestro.core.pokedex.domain.SimplePokemon
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion
 import com.carlosdiestro.features.home.models.PokedexPlo
+import com.carlosdiestro.features.home.models.PokemonPlo
 import com.carlosdiestro.features.home.models.RegionPlo
 import com.carlosdiestro.features.home.models.UiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +29,34 @@ internal class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _currentRegion: MutableStateFlow<RegionPlo?> = MutableStateFlow(null)
+
+    private var _currentPokedexId: MutableStateFlow<Int> = MutableStateFlow(2)
+
+    val pokedexEntriesState: StateFlow<PokedexEntriesUiState> = _currentPokedexId
+        .flatMapLatest(service::observePokedex)
+        .map { result ->
+            when (result) {
+                UiResult.Loading    -> PokedexEntriesUiState.Loading
+                is UiResult.Empty   -> {
+                    val syncResult = service.synchronizePokedex(result.extra!!)
+                    when (syncResult) {
+                        SyncResult.Success, SyncResult.NotNecessary -> PokedexEntriesUiState.Loading
+                        SyncResult.Error                            -> PokedexEntriesUiState.DataNotAvailable
+                    }
+                }
+
+                is UiResult.Success -> PokedexEntriesUiState.Success(
+                    pokemons = result.value.asPlo()
+                )
+
+                is UiResult.Failure -> PokedexEntriesUiState.DataNotAvailable
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = PokedexEntriesUiState.Loading
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<HomeUiState> = combine(
@@ -92,6 +122,13 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updatePokedex(pokedexId: Int) {
+        _currentPokedexId.update { oldPokedexId ->
+            if (oldPokedexId != pokedexId) pokedexId
+            else oldPokedexId
+        }
+    }
+
     private fun chooseId(currentRegion: RegionPlo?, defaultRegionId: Int): Int =
         currentRegion?.id ?: defaultRegionId
 }
@@ -115,5 +152,15 @@ private fun SimplePokedex.asPlo(): PokedexPlo = PokedexPlo(
     id = this.id.id,
     regionId = this.regionId.id,
     name = this.name.name
+)
+
+@JvmName("listSimplePokemonAsPlo")
+private fun List<SimplePokemon>.asPlo(): List<PokemonPlo> = this.map { it.asPlo() }
+
+private fun SimplePokemon.asPlo(): PokemonPlo = PokemonPlo(
+    id = this.id.id,
+    name = this.name.name,
+    spriteUrl = this.spriteUrl.url,
+    order = this.order.order
 )
 

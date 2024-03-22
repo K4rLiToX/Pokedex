@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.carlosdiestro.database.PokedexDatabase
 import com.carlosdiestro.database.pokedex.PokedexDao
+import com.carlosdiestro.database.pokedex.PokedexPokemonCrossRefDao
+import com.carlosdiestro.database.pokemon.PokemonDao
 import com.carlosdiestro.database.region.RegionDao
 import com.carlosdiestro.database.requestMetadata.RequestMetadataDao
 import dagger.Module
@@ -38,4 +40,12 @@ internal object DatabaseModule {
     @Singleton
     @Provides
     fun provideRequestMetadataDao(db: PokedexDatabase): RequestMetadataDao = db.requestMetadataDao()
+
+    @Singleton
+    @Provides
+    fun providePokemonDao(db: PokedexDatabase): PokemonDao = db.pokemonDao()
+
+    @Singleton
+    @Provides
+    fun providePokedexPokemonCrossRefDao(db: PokedexDatabase): PokedexPokemonCrossRefDao = db.pokedexPokemonCrossRefDao()
 }

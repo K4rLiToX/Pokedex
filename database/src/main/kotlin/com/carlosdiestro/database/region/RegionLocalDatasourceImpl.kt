@@ -1,8 +1,8 @@
 package com.carlosdiestro.database.region
 
+import com.carlosdiestro.core.common.models.ID
+import com.carlosdiestro.core.common.models.Name
 import com.carlosdiestro.core.region.data.RegionLocalDatasource
-import com.carlosdiestro.core.region.domain.ID
-import com.carlosdiestro.core.region.domain.Name
 import com.carlosdiestro.core.region.domain.Region
 import com.carlosdiestro.core.region.domain.SimplePokedex
 import com.carlosdiestro.core.region.domain.SimpleRegion

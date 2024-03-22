@@ -6,6 +6,7 @@ import com.carlosdiestro.core.common.models.asSyncResult
 import com.carlosdiestro.core.common.requests.RequestMetadata
 import com.carlosdiestro.core.common.requests.RequestRepository
 import com.carlosdiestro.core.common.requests.Route
+import com.carlosdiestro.core.pokedex.domain.Pokedex
 import com.carlosdiestro.core.pokedex.domain.PokedexRepository
 import com.carlosdiestro.core.pokedex.domain.SimplePokemon
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +34,11 @@ class PokedexRepositoryImpl @Inject constructor(
             if (requestMetadata == null) {
                 remote.getPokedexEntries(pokedexId.id)
                     .asSyncResult(
-                        cache = local::upsert,
+                        cache = { pokemons ->
+                            local.upsert(
+                                Pokedex(id = pokedexId, pokemons = pokemons)
+                            )
+                        },
                         updateRequestMetadata = { expireDate, eTag ->
                             requestRepository.upsert(
                                 RequestMetadata(
@@ -49,7 +54,11 @@ class PokedexRepositoryImpl @Inject constructor(
                 else {
                     remote.getPokedexEntries(pokedexId.id, requestMetadata.eTag.eTag)
                         .asSyncResult(
-                            cache = local::upsert,
+                            cache = { pokemons ->
+                                local.upsert(
+                                    Pokedex(id = pokedexId, pokemons = pokemons)
+                                )
+                            },
                             updateRequestMetadata = { expireDate, eTag ->
                                 requestRepository.upsert(
                                     requestMetadata.copy(

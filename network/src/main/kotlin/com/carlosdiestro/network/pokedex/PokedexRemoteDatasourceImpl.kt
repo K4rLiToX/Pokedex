@@ -5,8 +5,9 @@ import com.carlosdiestro.core.common.models.ID
 import com.carlosdiestro.core.common.models.Name
 import com.carlosdiestro.core.common.models.SyncState
 import com.carlosdiestro.core.pokedex.data.PokedexRemoteDatasource
-import com.carlosdiestro.core.pokedex.domain.PokedexIndex
+import com.carlosdiestro.core.pokedex.domain.PokedexOrder
 import com.carlosdiestro.core.pokedex.domain.SimplePokemon
+import com.carlosdiestro.core.pokedex.domain.Url
 import com.carlosdiestro.network.ApiResult
 import com.carlosdiestro.network.PokeApi
 import com.carlosdiestro.network.pokedex.dto.PokemonEntryDto
@@ -37,8 +38,9 @@ private fun List<PokemonEntryDto>.asDomain(): List<SimplePokemon> =
 
 private fun PokemonEntryDto.asDomain(): SimplePokemon = SimplePokemon(
     id = ID(this.pokemon.url.extractId()),
-    index = PokedexIndex(this.index),
-    name = Name(this.pokemon.name)
+    order = PokedexOrder(this.index),
+    name = Name(this.pokemon.name),
+    spriteUrl = Url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.pokemon.url.extractId()}.png")
 )
 
 private fun String.extractId(): Int = this.toUri().lastPathSegment?.toInt() ?: 1

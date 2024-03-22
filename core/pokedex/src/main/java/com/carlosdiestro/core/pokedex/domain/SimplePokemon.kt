@@ -5,9 +5,13 @@ import com.carlosdiestro.core.common.models.Name
 
 data class SimplePokemon(
     val id: ID,
-    val index: PokedexIndex,
+    val order: PokedexOrder,
     val name: Name,
+    val spriteUrl: Url,
 )
 
 @JvmInline
-value class PokedexIndex(val index: Int)
+value class PokedexOrder(val order: Int)
+
+@JvmInline
+value class Url(val url: String)
