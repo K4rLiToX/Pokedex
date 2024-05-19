@@ -1,6 +1,5 @@
 package com.carlosdiestro.pokedex.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +51,7 @@ fun PokedexTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = com.carlosdiestro.design_system.theme.Typography,
         content = content
     )
 }
