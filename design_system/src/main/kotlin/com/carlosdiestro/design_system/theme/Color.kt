@@ -1,4 +1,4 @@
-package com.carlosdiestro.pokedex.ui.theme
+package com.carlosdiestro.design_system.theme
 
 import androidx.compose.ui.graphics.Color
 
