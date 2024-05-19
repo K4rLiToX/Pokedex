@@ -15,7 +15,7 @@ import com.carlosdiestro.design_system.theme.SchemeColorContrast.Standard
 fun PokedexTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     schemeColorContrast: SchemeColorContrast = Standard,
     content: @Composable () -> Unit,
 ) {
