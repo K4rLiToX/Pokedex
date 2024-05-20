@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation(projects.designSystem)
+    implementation(projects.network)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
