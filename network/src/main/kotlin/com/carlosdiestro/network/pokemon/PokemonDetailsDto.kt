@@ -14,13 +14,13 @@ internal data class PokemonDetailsDto(
     @SerialName("stats")
     val stats: List<StatDto>,
     @SerialName("types")
-    val types: List<TypeDto>
+    val types: List<TypeDto>,
 )
 
 @Serializable
 internal data class AbilityDto(
     @SerialName("ability")
-    val ability: SimpleAbilityDto
+    val ability: SimpleAbilityDto,
 )
 
 @Serializable
@@ -28,7 +28,7 @@ internal data class SimpleAbilityDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )
 
 @Serializable
@@ -36,7 +36,7 @@ internal data class StatDto(
     @SerialName("base_stat")
     val base: Int,
     @SerialName("stat")
-    val stat: SimpleStatDto
+    val stat: SimpleStatDto,
 )
 
 @Serializable
@@ -44,7 +44,7 @@ internal data class SimpleStatDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )
 
 @Serializable
@@ -52,7 +52,7 @@ internal data class TypeDto(
     @SerialName("slot")
     val slot: Int,
     @SerialName("type")
-    val type: SimpleTypeDto
+    val type: SimpleTypeDto,
 )
 
 @Serializable
@@ -60,5 +60,5 @@ internal data class SimpleTypeDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )

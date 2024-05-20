@@ -6,16 +6,16 @@ import io.ktor.client.statement.HttpResponse
 
 internal sealed interface ApiResult<out T> {
     data class Success<T>(
-        val data: T
+        val data: T,
     ) : ApiResult<T>
 
-    data object RedirectException: ApiResult<Nothing>
+    data object RedirectException : ApiResult<Nothing>
 
-    data object DataNotAvailableException: ApiResult<Nothing>
+    data object DataNotAvailableException : ApiResult<Nothing>
 }
 
-internal suspend inline fun <reified  T> suspendRunCatching(
-    request: () -> HttpResponse
+internal suspend inline fun <reified T> suspendRunCatching(
+    request: () -> HttpResponse,
 ): ApiResult<T> =
     try {
         val response = request()

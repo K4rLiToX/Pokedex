@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class PokedexDto(
     @SerialName("pokemon_entries")
-    val pokemonEntries: List<PokemonEntryDto>
+    val pokemonEntries: List<PokemonEntryDto>,
 )
 
 @Serializable
@@ -14,7 +14,7 @@ internal data class PokemonEntryDto(
     @SerialName("entry_number")
     val order: Int,
     @SerialName("pokemon_species")
-    val pokemonSpecies: SimplePokemonSpeciesDto
+    val pokemonSpecies: SimplePokemonSpeciesDto,
 )
 
 @Serializable
@@ -22,5 +22,5 @@ internal data class SimplePokemonSpeciesDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )

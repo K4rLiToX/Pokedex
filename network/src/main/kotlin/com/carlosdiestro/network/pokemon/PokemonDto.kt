@@ -5,5 +5,5 @@ internal data class PokemonDto(
     val height: Int,
     val weight: Int,
     val abilities: List<AbilityDto>,
-    val eggGroups: List<EggGroupDto>
+    val eggGroups: List<EggGroupDto>,
 )

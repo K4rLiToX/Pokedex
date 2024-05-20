@@ -8,7 +8,7 @@ internal data class PokemonSpeciesDto(
     @SerialName("egg_groups")
     val eggGroups: List<EggGroupDto>,
     @SerialName("evolution_chain")
-    val evolutionChain: SimpleEvolutionChainDto
+    val evolutionChain: SimpleEvolutionChainDto,
 )
 
 @Serializable
@@ -16,11 +16,11 @@ internal data class EggGroupDto(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 )
 
 @Serializable
 internal data class SimpleEvolutionChainDto(
     @SerialName("url")
-    val url: String
+    val url: String,
 )
