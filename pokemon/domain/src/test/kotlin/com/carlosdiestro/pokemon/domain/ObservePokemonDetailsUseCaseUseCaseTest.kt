@@ -19,7 +19,7 @@ import org.junit.Test
 class ObservePokemonDetailsUseCaseUseCaseTest {
 
     private val pokemonId = PokemonId(1)
-    
+
     private val pokemonDetails = PokemonDetails(
         entry = PokemonEntry(
             id = pokemonId,
@@ -31,7 +31,8 @@ class ObservePokemonDetailsUseCaseUseCaseTest {
         weight = PokemonWeight(0),
         types = emptyList(),
         abilities = emptyList(),
-        eggGroups = emptyList()
+        eggGroups = emptyList(),
+        stats = emptyList()
     )
 
     @Test

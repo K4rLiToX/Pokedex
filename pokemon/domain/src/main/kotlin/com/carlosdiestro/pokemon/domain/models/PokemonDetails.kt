@@ -7,6 +7,7 @@ data class PokemonDetails(
     val weight: PokemonWeight,
     val eggGroups: List<PokemonEggGroup>,
     val abilities: List<PokemonAbility>,
+    val stats: List<PokemonStat>,
 )
 
 @JvmInline
@@ -23,3 +24,8 @@ value class PokemonEggGroup(val value: String)
 
 @JvmInline
 value class PokemonAbility(val value: String)
+
+data class PokemonStat(
+    val name: String,
+    val value: Int,
+)
