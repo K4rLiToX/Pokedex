@@ -7,7 +7,7 @@ import com.carlosdiestro.pokemon.domain.models.PokemonId
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ObservePokemonDetails @Inject constructor(
+class ObservePokemonDetailsUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository,
 ) {
 
