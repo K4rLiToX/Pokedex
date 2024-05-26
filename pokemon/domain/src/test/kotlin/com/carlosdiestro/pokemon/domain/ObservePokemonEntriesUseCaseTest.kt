@@ -3,11 +3,8 @@ package com.carlosdiestro.pokemon.domain
 import com.carlosdiestro.pokemon.domain.Event.DataNotAvailable
 import com.carlosdiestro.pokemon.domain.Event.DataNotModified
 import com.carlosdiestro.pokemon.domain.Event.Success
-import com.carlosdiestro.pokemon.domain.models.PokemonEntry
 import com.carlosdiestro.pokemon.domain.usecases.ObservePokemonEntriesUseCase
-import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,7 +13,12 @@ class ObservePokemonEntriesUseCaseTest {
 
     @Test
     fun observePokemonEntries_emitsEmptyList_whenRepositoryReturnsEmptyList() = runTest {
-        val repository = createRepositoryWithEvent(Success(emptyList()))
+        val repository = createRepositoryWithEvent(
+            event = Success(emptyList()),
+            pokemonRepositoryFunction = {
+                observePokemonEntries()
+            }
+        )
 
         val useCase = ObservePokemonEntriesUseCase(repository)
 
@@ -25,7 +27,12 @@ class ObservePokemonEntriesUseCaseTest {
 
     @Test
     fun observePokemonEntries_emitsValidList_whenRepositoryReturnsValidList() = runTest {
-        val repository = createRepositoryWithEvent(Success(listOf(mockk())))
+        val repository = createRepositoryWithEvent(
+            event = Success(listOf(mockk())),
+            pokemonRepositoryFunction = {
+                observePokemonEntries()
+            }
+        )
 
         val useCase = ObservePokemonEntriesUseCase(repository)
 
@@ -34,7 +41,12 @@ class ObservePokemonEntriesUseCaseTest {
 
     @Test
     fun observePokemonEntries_emitsDataNotModified_whenRepositoryReturnsDataNotModified() = runTest {
-        val repository = createRepositoryWithEvent(DataNotModified)
+        val repository = createRepositoryWithEvent(
+            event = DataNotModified,
+            pokemonRepositoryFunction = {
+                observePokemonEntries()
+            }
+        )
 
         val useCase = ObservePokemonEntriesUseCase(repository)
 
@@ -43,17 +55,16 @@ class ObservePokemonEntriesUseCaseTest {
 
     @Test
     fun observePokemonEntries_emitsDataNotAvailable_whenRepositoryReturnsDataNotAvailable() = runTest {
-        val repository = createRepositoryWithEvent(DataNotAvailable)
+        val repository = createRepositoryWithEvent(
+            event = DataNotAvailable,
+            pokemonRepositoryFunction = {
+                observePokemonEntries()
+            }
+        )
 
         val useCase = ObservePokemonEntriesUseCase(repository)
 
         useCase.assertDataNotAvailable()
-    }
-
-    private fun createRepositoryWithEvent(event: Event<List<PokemonEntry>>): PokemonRepository {
-        return mockk<PokemonRepository> {
-            coEvery { observePokemonEntries() } returns flowOf(event)
-        }
     }
 
     private suspend fun ObservePokemonEntriesUseCase.assertSuccessAndEmpty() {
