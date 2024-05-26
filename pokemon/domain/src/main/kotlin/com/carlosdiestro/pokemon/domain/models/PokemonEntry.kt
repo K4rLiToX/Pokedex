@@ -4,7 +4,7 @@ data class PokemonEntry(
     val id: PokemonId,
     val name: PokemonName,
     val order: PokemonOrder,
-    val spriteUrl: SpriteUrl
+    val spriteUrl: SpriteUrl,
 )
 
 @JvmInline
