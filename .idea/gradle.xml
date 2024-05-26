@@ -26,6 +26,8 @@
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/design_system" />
             <option value="$PROJECT_DIR$/network" />
+            <option value="$PROJECT_DIR$/pokemon" />
+            <option value="$PROJECT_DIR$/pokemon/domain" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
