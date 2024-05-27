@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.pokemon.domain)
+    api(projects.pokemon.domain)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
