@@ -25,12 +25,12 @@ internal class PokemonRemoteDatasourceImpl @Inject constructor(
     }
 
     override suspend fun fetchPokemon(id: Int): Event<PokemonDetails> {
-       return when (val response = api.fetchPokemon(id)) {
-           DataNotAvailableException -> Event.DataNotAvailable
-           RedirectException         -> Event.DataNotModified
-           is Success                -> Event.Success(
-               response.data.asDomain()
-           )
-       }
+        return when (val response = api.fetchPokemon(id)) {
+            DataNotAvailableException -> Event.DataNotAvailable
+            RedirectException         -> Event.DataNotModified
+            is Success                -> Event.Success(
+                response.data.asDomain()
+            )
+        }
     }
 }
