@@ -1,14 +1,5 @@
 package com.carlosdiestro.network
 
-import com.carlosdiestro.network.TestUtils.assertDataNotAvailable
-import com.carlosdiestro.network.TestUtils.assertDataNotModified
-import com.carlosdiestro.network.TestUtils.assertSuccess
-import com.carlosdiestro.network.TestUtils.assertSuccessAndEmpty
-import com.carlosdiestro.network.TestUtils.assertSuccessAndNotEmpty
-import com.carlosdiestro.network.TestUtils.createPokeApiWithResult
-import com.carlosdiestro.network.TestUtils.pokemon
-import com.carlosdiestro.network.TestUtils.pokemonEntries
-import com.carlosdiestro.network.TestUtils.pokemonId
 import com.carlosdiestro.network.pokedex.PokedexDto
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
