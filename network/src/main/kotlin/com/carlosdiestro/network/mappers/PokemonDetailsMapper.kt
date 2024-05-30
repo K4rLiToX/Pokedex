@@ -38,15 +38,19 @@ internal fun PokemonDto.getPokemonEntry(): PokemonEntry = PokemonEntry(
 
 private fun Int.getSpriteUrl(): String = "${ApiRoutes.BASE_POKEMON_SPRITE_URL}/${this}.png"
 
+@JvmName("ListTypeDtoAsDomain")
 private fun List<TypeDto>.asDomain(): List<PokemonType> = this.map(TypeDto::asDomain)
 private fun TypeDto.asDomain(): PokemonType = PokemonType(this.type.name)
 
+@JvmName("ListEggGroupDtoAsDomain")
 private fun List<EggGroupDto>.asDomain(): List<PokemonEggGroup> = this.map(EggGroupDto::asDomain)
 private fun EggGroupDto.asDomain(): PokemonEggGroup = PokemonEggGroup(this.name)
 
+@JvmName("ListAbilityDtoAsDomain")
 private fun List<AbilityDto>.asDomain(): List<PokemonAbility> = this.map(AbilityDto::asDomain)
 private fun AbilityDto.asDomain(): PokemonAbility = PokemonAbility(this.ability.name)
 
+@JvmName("ListStatDtoAsDomain")
 private fun List<StatDto>.asDomain(): List<PokemonStat> = this.map(StatDto::asDomain)
 private fun StatDto.asDomain(): PokemonStat = PokemonStat(
     name = this.stat.name,
