@@ -82,5 +82,6 @@ pokedex-android-ktor = { id = "pokedex.android.ktor", version = "unspecified" }
 pokedex-android-library = { id = "pokedex.android.library", version = "unspecified" }
 pokedex-android-library-compose = { id = "pokedex.android.library.compose", version = "unspecified" }
 pokedex-android-room = { id = "pokedex.android.room", version = "unspecified" }
+pokedex-jvm-hilt = { id = "pokedex.jvm.hilt", version = "unspecified" }
 pokedex-jvm-library = { id = "pokedex.jvm.library", version = "unspecified" }
 
