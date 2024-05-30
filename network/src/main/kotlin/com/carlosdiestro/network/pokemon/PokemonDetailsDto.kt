@@ -5,6 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class PokemonDetailsDto(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("order")
+    val order: Int,
     @SerialName("abilities")
     val abilities: List<AbilityDto>,
     @SerialName("height")
