@@ -62,5 +62,9 @@ gradlePlugin {
             id = "pokedex.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("jvmHilt") {
+            id = "pokedex.jvm.hilt"
+            implementationClass = "JvmHiltConventionPlugin"
+        }
     }
 }

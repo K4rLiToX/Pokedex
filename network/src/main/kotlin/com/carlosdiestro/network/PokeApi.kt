@@ -50,11 +50,15 @@ internal class PokeApi @Inject constructor(
         species is Success && details is Success                     -> {
             Success(
                 PokemonDto(
+                    id = details.data.id,
+                    name = details.data.name,
+                    order = details.data.order,
                     types = details.data.types,
                     height = details.data.height,
                     weight = details.data.weight,
                     eggGroups = species.data.eggGroups,
-                    abilities = details.data.abilities
+                    abilities = details.data.abilities,
+                    stats = details.data.stats
                 )
             )
         }

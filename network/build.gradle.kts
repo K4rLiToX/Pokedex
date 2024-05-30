@@ -18,3 +18,11 @@ android {
         }
     }
 }
+
+dependencies {
+    implementation(projects.pokemon.data)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+}
