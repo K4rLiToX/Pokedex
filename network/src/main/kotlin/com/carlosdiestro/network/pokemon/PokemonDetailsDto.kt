@@ -40,7 +40,7 @@ internal data class SimpleAbilityDto(
 @Serializable
 internal data class StatDto(
     @SerialName("base_stat")
-    val base: Int,
+    val statValue: Int,
     @SerialName("stat")
     val stat: SimpleStatDto,
 )
