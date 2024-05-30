@@ -1,13 +1,10 @@
 plugins {
     alias(libs.plugins.pokedex.jvm.library)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.pokedex.jvm.hilt)
 }
 
 dependencies {
     api(projects.pokemon.domain)
-
-    implementation(libs.hilt.core)
-    implementation(libs.hilt.compiler)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
