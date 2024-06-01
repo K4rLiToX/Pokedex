@@ -16,6 +16,7 @@ javaxInject = "1"
 junit = "4.13.2"
 kotlin = "1.9.24"
 kotlinxCoroutines = "1.8.1"
+kotlinxSerializationJson = "1.6.3"
 ksp = "1.9.24-1.0.20"
 ktor = "2.3.8"
 room = "2.6.1"
@@ -56,6 +57,7 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 # Dependencies of the included build-logic
