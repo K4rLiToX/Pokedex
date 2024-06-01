@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="searchbar_placeholder">Search pokemons…</string>"
+    <string name="empty_state">Empty</string>
+    <string name="data_not_available">Data not available</string>
+
+    <string name="search_action_description">Search</string>
+    <string name="settings_action_description">Settings</string>
+</resources>
