@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.pokedex.android.library.compose)
     alias(libs.plugins.pokedex.android.hilt)
     alias(libs.plugins.pokedex.android.feature)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -23,6 +24,7 @@ dependencies {
     implementation(projects.pokemon.domain)
 
     implementation(libs.androidx.palette.ktx)
+    implementation(libs.kotlinx.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
