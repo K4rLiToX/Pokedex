@@ -25,6 +25,7 @@ dependencies {
 
     implementation(libs.androidx.palette.ktx)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
