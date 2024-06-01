@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -31,11 +33,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
+import com.carlosdiestro.design_system.theme.PokedexTheme
 
 @Composable
 fun PokemonEntry(
@@ -61,6 +65,7 @@ fun PokemonEntry(
                     cardColors.containerColor
                 )
             )
+            .width(PokemonEntryTokens.ContainerWidth)
     ) {
         Header(
             name = name,
@@ -137,6 +142,9 @@ private object PokemonEntryTokens {
         @Composable
         get() = MaterialTheme.typography.bodySmall
 
+    val ContainerWidth: Dp
+        get() = 180.dp
+
     val ContainerShape: RoundedCornerShape
         get() = RoundedCornerShape(24.dp)
 
@@ -190,3 +198,18 @@ private fun Modifier.verticalGradient(colors: List<Color>): Modifier = this.then
         drawContent()
     }
 )
+
+@Composable
+@PreviewLightDark
+private fun PokemonEntryPreview() {
+    PokedexTheme {
+        Surface {
+            PokemonEntry(
+                onClick = {},
+                name = "Bulbasaur",
+                order = "#001",
+                coverUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+            )
+        }
+    }
+}

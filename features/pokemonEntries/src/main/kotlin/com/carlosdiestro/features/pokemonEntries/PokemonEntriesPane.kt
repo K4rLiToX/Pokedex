@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -27,11 +28,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.carlosdiestro.design_system.theme.PokedexIcons
+import com.carlosdiestro.design_system.theme.PokedexTheme
 import com.carlosdiestro.features.pokemonEntries.components.PokemonEntry
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.DataNotAvailable
@@ -39,6 +44,10 @@ import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.Emp
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.Loading
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.Success
 import com.carlosdiestro.pokemon.domain.models.PokemonEntry
+import com.carlosdiestro.pokemon.domain.models.PokemonId
+import com.carlosdiestro.pokemon.domain.models.PokemonName
+import com.carlosdiestro.pokemon.domain.models.PokemonOrder
+import com.carlosdiestro.pokemon.domain.models.SpriteUrl
 
 @Composable
 internal fun PokemonEntriesPane(
@@ -220,5 +229,100 @@ private object PokemonEntriesPaneTokens {
 
     private val PokemonEntriesLayoutExtraVerticalPadding: Dp
         get() = 32.dp
-
 }
+
+@Composable
+@PreviewLightDark
+@PreviewScreenSizes
+private fun PokemonEntriesLayoutPreview() {
+    PokedexTheme {
+        Surface {
+            PokemonEntriesPane(
+                state = Success(
+                    entries = pokemonEntries
+                )
+            )
+        }
+    }
+}
+
+@Composable
+@PreviewLightDark
+private fun PokemonEntriesEmptyLayoutPreview() {
+    PokedexTheme {
+        Surface {
+            PokemonEntriesPane(
+                state = Empty
+            )
+        }
+    }
+}
+
+@Composable
+@PreviewLightDark
+private fun PokemonEntriesDataNotAvailableLayoutPreview() {
+    PokedexTheme {
+        Surface {
+            PokemonEntriesPane(
+                state = DataNotAvailable
+            )
+        }
+    }
+}
+
+private val pokemonEntries = listOf(
+    PokemonEntry(
+        id = PokemonId(1),
+        name = PokemonName("Bulbasaur"),
+        order = PokemonOrder(1),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(2),
+        name = PokemonName("Ivysaur"),
+        order = PokemonOrder(2),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(3),
+        name = PokemonName("Venusaur"),
+        order = PokemonOrder(3),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(4),
+        name = PokemonName("Charmander"),
+        order = PokemonOrder(4),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(5),
+        name = PokemonName("Charmeleon"),
+        order = PokemonOrder(5),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(6),
+        name = PokemonName("Charizard"),
+        order = PokemonOrder(6),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(7),
+        name = PokemonName("Squirtle"),
+        order = PokemonOrder(7),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(8),
+        name = PokemonName("Wartortle"),
+        order = PokemonOrder(8),
+        spriteUrl = SpriteUrl("")
+    ),
+    PokemonEntry(
+        id = PokemonId(9),
+        name = PokemonName("Blastoise"),
+        order = PokemonOrder(9),
+        spriteUrl = SpriteUrl("")
+    ),
+)
