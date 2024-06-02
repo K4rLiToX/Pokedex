@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation(projects.designSystem)
     implementation(projects.network)
+    implementation(projects.features.pokemonEntries)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

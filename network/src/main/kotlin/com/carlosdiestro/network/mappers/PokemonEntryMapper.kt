@@ -1,5 +1,6 @@
 package com.carlosdiestro.network.mappers
 
+import android.net.Uri
 import com.carlosdiestro.network.ApiRoutes
 import com.carlosdiestro.network.pokedex.PokemonEntryDto
 import com.carlosdiestro.pokemon.domain.models.PokemonEntry
@@ -17,5 +18,5 @@ internal fun PokemonEntryDto.asDomain(): PokemonEntry = PokemonEntry(
     spriteUrl = SpriteUrl(pokemonSpecies.url.getSpriteUrl())
 )
 
-private fun String.getPokemonId(): Int = split("/").last().toInt()
+private fun String.getPokemonId(): Int = Uri.parse(this).lastPathSegment?.toInt() ?: 1
 private fun String.getSpriteUrl(): String = "${ApiRoutes.BASE_POKEMON_SPRITE_URL}/${this.getPokemonId()}.png"
