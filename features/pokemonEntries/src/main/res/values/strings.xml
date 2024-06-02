@@ -6,4 +6,6 @@
 
     <string name="search_action_description">Search</string>
     <string name="settings_action_description">Settings</string>
+    <string name="back_action_description">Back</string>
+    <string name="clear_query_action_description">Cancel query</string>
 </resources>
