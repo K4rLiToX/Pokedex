@@ -3,41 +3,33 @@ package com.carlosdiestro.features.pokemonEntries
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.carlosdiestro.design_system.theme.PokedexIcons
 import com.carlosdiestro.design_system.theme.PokedexTheme
 import com.carlosdiestro.features.pokemonEntries.components.PokemonEntry
+import com.carlosdiestro.features.pokemonEntries.components.PokemonSearchBar
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.DataNotAvailable
 import com.carlosdiestro.features.pokemonEntries.state.PokemonEntriesUiState.Empty
@@ -60,46 +52,32 @@ internal fun PokemonEntriesPane(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PokemonEntriesPane(
     state: PokemonEntriesUiState,
 ) {
+    var query by rememberSaveable {
+        mutableStateOf("")
+    }
+
     Scaffold(
         topBar = {
-            SearchBar(
-                query = "",
-                onQueryChange = {},
+            PokemonSearchBar(
+                query = query,
+                onQueryChange = {
+                    query = it
+                },
                 onSearch = {},
-                active = false,
-                onActiveChange = {},
-                leadingIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = PokedexIcons.Search,
-                            contentDescription = stringResource(id = R.string.search_action_description)
-                        )
+                onLeadingIconClick = {
+                    query = ""
+                },
+                onTrailIconClick = { isActive ->
+                    if (isActive) {
+                        query = ""
+                    } else {
+                        Unit
                     }
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.searchbar_placeholder))
-                },
-                trailingIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = PokedexIcons.Settings,
-                            contentDescription = stringResource(id = R.string.settings_action_description)
-                        )
-                    }
-                },
-                windowInsets = SearchBarDefaults.windowInsets.exclude(WindowInsets.statusBars),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PokemonEntriesPaneTokens.SearchPadding)
+                }
             ) {
 
             }
@@ -112,14 +90,12 @@ private fun PokemonEntriesPane(
             is Success -> PokemonEntriesLayout(
                 entries = state.entries,
                 contentPadding = PokemonEntriesPaneTokens.getPokemonEntriesLayoutPadding(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding()
+                    top = innerPadding.calculateTopPadding()
                 ),
                 modifier = Modifier
                     .fillMaxSize()
             )
         }
-
     }
 }
 
@@ -204,24 +180,13 @@ private object PokemonEntriesPaneTokens {
     val PokemonEntriesHorizontalSpacing: Dp
         get() = 16.dp
 
-    val SearchPadding: PaddingValues
-        get() = PaddingValues(
-            start = SearchHorizontalPadding,
-            end = SearchHorizontalPadding
-        )
-
-    private val SearchHorizontalPadding: Dp
-        get() = 16.dp
-
     @Composable
     fun getPokemonEntriesLayoutPadding(
         top: Dp,
-        bottom: Dp,
     ) = PaddingValues(
         start = PokemonEntriesLayoutHorizontalPadding,
         top = top + PokemonEntriesLayoutExtraVerticalPadding,
-        end = PokemonEntriesLayoutHorizontalPadding,
-        bottom = bottom
+        end = PokemonEntriesLayoutHorizontalPadding
     )
 
     private val PokemonEntriesLayoutHorizontalPadding: Dp
