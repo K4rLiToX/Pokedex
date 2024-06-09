@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/design_system" />
             <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/pokemonDetails" />
             <option value="$PROJECT_DIR$/features/pokemonEntries" />
             <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/pokemon" />
