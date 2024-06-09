@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.carlosdiestro.features.pokemonEntries.navigation.PokemonEntries
 import com.carlosdiestro.features.pokemonEntries.navigation.pokemonEntriesPane
+import com.carlosdiestro.features.pokemondetails.navigation.navigateToPokemonDetails
 import com.carlosdiestro.features.pokemondetails.navigation.pokemonDetails
 import com.carlosdiestro.pokedex.ui.PokedexAppState
 
@@ -21,7 +22,9 @@ internal fun PokedexNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        pokemonEntriesPane()
+        pokemonEntriesPane(
+            onEntryClick = navController::navigateToPokemonDetails
+        )
         pokemonDetails(
             onBack = navController::popBackStack
         )
