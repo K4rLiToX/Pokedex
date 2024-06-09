@@ -1,33 +1,37 @@
 plugins {
-    alias(libs.plugins.pokedex.android.library)
-    alias(libs.plugins.pokedex.android.library.compose)
-    alias(libs.plugins.pokedex.android.hilt)
-    alias(libs.plugins.pokedex.android.feature)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.carlosdiestro.features.pokemondetails"
+    compileSdk = 34
 
     defaultConfig {
+        minSdk = 30
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation(projects.pokemon.domain)
 
-    implementation(libs.androidx.palette.ktx)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.gif.compose)
+    implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
