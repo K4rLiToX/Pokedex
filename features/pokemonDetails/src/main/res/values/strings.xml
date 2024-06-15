@@ -3,6 +3,7 @@
     <string name="empty_state">Empty</string>
     <string name="data_not_available_state">Data not Available</string>
 
+    <string name="about_title">About</string>
     <string name="stats_title">Stats</string>
 
     <string name="back_action_content_description">Back</string>
