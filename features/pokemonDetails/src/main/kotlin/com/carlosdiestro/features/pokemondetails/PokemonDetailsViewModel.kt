@@ -1,5 +1,6 @@
 package com.carlosdiestro.features.pokemondetails
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,7 @@ internal class PokemonDetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val pokemonId = savedStateHandle.toRoute<PokemonDetails>().id
+    val backgroundColor = Color(savedStateHandle.toRoute<PokemonDetails>().backgroundColor)
 
     val uiState: StateFlow<PokemonDetailsUiState> = observePokemonDetails(PokemonId(pokemonId))
         .map { event ->

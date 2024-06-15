@@ -43,7 +43,7 @@ import com.carlosdiestro.design_system.theme.PokedexTheme
 
 @Composable
 fun PokemonEntry(
-    onClick: () -> Unit,
+    onClick: (Color) -> Unit,
     name: String,
     order: String,
     coverUrl: String,
@@ -58,7 +58,9 @@ fun PokemonEntry(
     Column(
         modifier = modifier
             .clip(PokemonEntryTokens.ContainerShape)
-            .clickable(onClick = onClick)
+            .clickable {
+                onClick(cardColors.containerColor)
+            }
             .verticalGradient(
                 colors = listOf(
                     cardColors.containerColor.darken(),

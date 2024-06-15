@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -43,7 +44,7 @@ import com.carlosdiestro.pokemon.domain.models.SpriteUrl
 
 @Composable
 internal fun PokemonEntriesPane(
-    onEntryClick: (Int) -> Unit,
+    onEntryClick: (Int, Int) -> Unit,
     viewModel: PokemonEntriesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle(initialValue = Loading)
@@ -57,7 +58,7 @@ internal fun PokemonEntriesPane(
 @Composable
 private fun PokemonEntriesPane(
     state: PokemonEntriesUiState,
-    onEntryClick: (Int) -> Unit = {},
+    onEntryClick: (Int, Int) -> Unit = { _, _ -> },
 ) {
     var query by rememberSaveable {
         mutableStateOf("")
@@ -107,7 +108,7 @@ private fun PokemonEntriesPane(
 private fun PokemonEntriesLayout(
     entries: List<PokemonEntry>,
     contentPadding: PaddingValues,
-    onEntryClick: (Int) -> Unit,
+    onEntryClick: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -122,7 +123,7 @@ private fun PokemonEntriesLayout(
             key = { it.id.value }
         ) { entry ->
             PokemonEntry(
-                onClick = { onEntryClick(entry.id.value) },
+                onClick = { onEntryClick(entry.id.value, it.toArgb()) },
                 name = entry.name.value,
                 order = "#${entry.order.value}",
                 coverUrl = entry.spriteUrl.value

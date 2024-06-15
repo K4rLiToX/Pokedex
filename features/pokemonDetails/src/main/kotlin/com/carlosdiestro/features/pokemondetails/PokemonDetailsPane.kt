@@ -1,8 +1,5 @@
 package com.carlosdiestro.features.pokemondetails
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +30,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -43,13 +38,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import com.carlosdiestro.design_system.theme.PokedexIcons
 import com.carlosdiestro.features.pokemondetails.components.AbilitySpec
 import com.carlosdiestro.features.pokemondetails.components.EggGroupSpec
@@ -71,6 +68,7 @@ internal fun PokemonDetailsPane(
     PokemonDetailsPane(
         onBack = onBack,
         state = state,
+        backgroundColor = viewModel.backgroundColor,
         modifier = Modifier
             .fillMaxSize()
     )
@@ -81,12 +79,9 @@ internal fun PokemonDetailsPane(
 private fun PokemonDetailsPane(
     onBack: () -> Unit,
     state: PokemonDetailsUiState,
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    val defaultBackgroundColor = MaterialTheme.colorScheme.surface
-    var backgroundColor by remember {
-        mutableStateOf(defaultBackgroundColor)
-    }
     val sheetState = rememberStandardBottomSheetState()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
@@ -224,15 +219,15 @@ private fun PokemonDetailsPane(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
+                        val imageRequest = ImageRequest.Builder(LocalContext.current)
+                            .data("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${state.pokemon.entry.id.value}.gif")
+                            .decoderFactory(ImageDecoderDecoder.Factory())
+                            .crossfade(true)
+                            .build()
                         AsyncImage(
-                            model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${state.pokemon.entry.id.value}.gif",
+                            model = imageRequest,
                             contentDescription = state.pokemon.entry.name.value,
                             contentScale = ContentScale.Fit,
-                            onSuccess = {
-                                calcDominantColor(it.result.drawable) { color ->
-                                    backgroundColor = color
-                                }
-                            },
                             modifier = Modifier
                                 .width(140.dp)
                                 .aspectRatio(1F)
@@ -311,14 +306,5 @@ private fun DataNotAvailableLayout(
             text = stringResource(id = R.string.data_not_available_state),
             textAlign = TextAlign.Center
         )
-    }
-}
-
-private fun calcDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {
-    val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
-    Palette.from(bmp).generate { palette ->
-        palette?.dominantSwatch?.rgb?.let { value ->
-            onFinish(Color(value))
-        }
     }
 }
