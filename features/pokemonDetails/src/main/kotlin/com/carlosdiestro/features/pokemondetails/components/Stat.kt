@@ -98,14 +98,9 @@ private object StatTokens {
 
     val ContainerPadding: PaddingValues
         get() = PaddingValues(
-            start = ContainerHorizontalPadding,
             top = ContainerVerticalPadding,
-            end = ContainerHorizontalPadding,
             bottom = ContainerVerticalPadding
         )
-
-    private val ContainerHorizontalPadding: Dp
-        get() = 16.dp
 
     private val ContainerVerticalPadding: Dp
         get() = 12.dp
