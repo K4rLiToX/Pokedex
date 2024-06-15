@@ -57,7 +57,7 @@ internal fun PokemonEntriesPane(
 @Composable
 private fun PokemonEntriesPane(
     state: PokemonEntriesUiState,
-    onEntryClick: (Int) -> Unit = {}
+    onEntryClick: (Int) -> Unit = {},
 ) {
     var query by rememberSaveable {
         mutableStateOf("")
