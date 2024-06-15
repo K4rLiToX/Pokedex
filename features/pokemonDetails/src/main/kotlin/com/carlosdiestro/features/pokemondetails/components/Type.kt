@@ -75,24 +75,24 @@ private object TypeTokens {
 
     @Composable
     fun getContainerColor(type: String): Color = when (type) {
-        "Normal"   -> Normal
-        "Fire"     -> Fire
-        "Electric" -> Electric
-        "Water"    -> Water
-        "Grass"    -> Grass
-        "Ice"      -> Ice
-        "Fighting" -> Fighting
-        "Poison"   -> Poison
-        "Ground"   -> Ground
-        "Flying"   -> Flying
-        "Psychic"  -> Psychic
-        "Bug"      -> Bug
-        "Rock"     -> Rock
-        "Ghost"    -> Ghost
-        "Dragon"   -> Dragon
-        "Dark"     -> Dark
-        "Steel"    -> Steel
-        "Fairy"    -> Fairy
+        "normal"   -> Normal
+        "fire"     -> Fire
+        "electric" -> Electric
+        "water"    -> Water
+        "grass"    -> Grass
+        "ice"      -> Ice
+        "fighting" -> Fighting
+        "poison"   -> Poison
+        "ground"   -> Ground
+        "flying"   -> Flying
+        "psychic"  -> Psychic
+        "bug"      -> Bug
+        "rock"     -> Rock
+        "ghost"    -> Ghost
+        "dragon"   -> Dragon
+        "dark"     -> Dark
+        "steel"    -> Steel
+        "fairy"    -> Fairy
         else       -> Normal
     }
 
@@ -120,6 +120,18 @@ private object TypeTokens {
 
     private val ContainerVerticalPadding: Dp
         get() = 4.dp
+
+    val BorderStroke: BorderStroke
+        get() = BorderStroke(
+            width = BorderStrokeWidth,
+            color = BorderStrokeColor
+        )
+
+    private val BorderStrokeWidth: Dp
+        get() = 1.dp
+
+    private val BorderStrokeColor: Color
+        get() = Color.White
 }
 
 @Composable
@@ -130,24 +142,24 @@ private fun TypePreview() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Type(label = "Normal")
-                Type(label = "Fire")
-                Type(label = "Electric")
-                Type(label = "Water")
-                Type(label = "Grass")
-                Type(label = "Ice")
-                Type(label = "Fighting")
-                Type(label = "Poison")
-                Type(label = "Ground")
-                Type(label = "Flying")
-                Type(label = "Psychic")
-                Type(label = "Bug")
-                Type(label = "Rock")
-                Type(label = "Ghost")
-                Type(label = "Dragon")
-                Type(label = "Dark")
-                Type(label = "Steel")
-                Type(label = "Fairy")
+                Type(label = "normal")
+                Type(label = "fire")
+                Type(label = "electric")
+                Type(label = "water")
+                Type(label = "grass")
+                Type(label = "ice")
+                Type(label = "fighting")
+                Type(label = "poison")
+                Type(label = "ground")
+                Type(label = "flying")
+                Type(label = "psychic")
+                Type(label = "bug")
+                Type(label = "rock")
+                Type(label = "ghost")
+                Type(label = "dragon")
+                Type(label = "dark")
+                Type(label = "steel")
+                Type(label = "fairy")
             }
         }
     }
