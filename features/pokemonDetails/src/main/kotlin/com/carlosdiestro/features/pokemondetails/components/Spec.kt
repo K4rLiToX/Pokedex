@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -87,7 +90,9 @@ private fun BasicSpec(
     OutlinedCard(
         onClick = {},
         border = SpecTokens.borderStroke,
+        colors = SpecTokens.Colors,
         modifier = modifier
+            .widthIn(max = SpecTokens.ContainerMaxWidth)
     ) {
         Icon(
             painter = painterResource(id = type.icon),
@@ -115,6 +120,17 @@ private fun BasicSpec(
 @Immutable
 private object SpecTokens {
 
+    val Colors: CardColors
+        @Composable
+        get() = CardDefaults.outlinedCardColors(
+            containerColor = ContainerColor
+        )
+
+    private val ContainerColor: Color
+        @ReadOnlyComposable
+        @Composable
+        get() = MaterialTheme.colorScheme.surfaceContainerLowest
+
     val ValueTextStyle: TextStyle
         @ReadOnlyComposable
         @Composable
@@ -125,6 +141,9 @@ private object SpecTokens {
 
     val ValuesSpacing: Dp
         get() = 8.dp
+
+    val ContainerMaxWidth: Dp
+        get() = 174.dp
 
     val ContainerPadding: PaddingValues
         get() = PaddingValues(
