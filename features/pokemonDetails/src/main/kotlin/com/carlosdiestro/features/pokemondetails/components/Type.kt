@@ -1,5 +1,6 @@
 package com.carlosdiestro.features.pokemondetails.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ internal fun Type(
     Surface(
         shape = TypeTokens.ContainerShape,
         contentColor = TypeTokens.ContentColor,
+        border = TypeTokens.BorderStroke,
         modifier = modifier
             .requiredSizeIn(minWidth = TypeTokens.ContainerMinWidth)
     ) {
