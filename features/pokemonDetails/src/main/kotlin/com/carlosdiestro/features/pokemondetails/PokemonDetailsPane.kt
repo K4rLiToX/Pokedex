@@ -175,67 +175,11 @@ private fun PokemonDetailsPane(
             )
         },
         frontLayerContent = {
-            when (state) {
-                DataNotAvailable -> Unit
-                Empty            -> Unit
-                Loading          -> Unit
-                is Success       -> {
-                    val pokemon = state.pokemon
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        item {
-                            Text(
-                                text = stringResource(id = R.string.about_title),
-                                style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .padding(top = 24.dp)
-                            )
-                        }
-
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                        item {
-                            Specs(
-                                height = pokemon.height.value,
-                                weight = pokemon.weight.value,
-                                eggGroups = pokemon.eggGroups,
-                                abilities = pokemon.abilities,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 24.dp)
-                            )
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(32.dp))
-                        }
-                        item {
-                            Text(
-                                text = stringResource(id = R.string.stats_title),
-                                style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                            )
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                        items(
-                            items = pokemon.stats
-                        ) { stat ->
-                            Stat(
-                                label = stat.name,
-                                value = stat.value,
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                            )
-                        }
-                    }
-                }
-            }
+            Content(
+                state = state,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
         },
         modifier = modifier
     )
@@ -299,6 +243,50 @@ private fun Header(
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun Content(
+    state: PokemonDetailsUiState,
+    modifier: Modifier = Modifier,
+) {
+    when (state) {
+        DataNotAvailable -> DataNotAvailableLayout(Modifier.fillMaxSize())
+        Empty            -> EmptyLayout(Modifier.fillMaxSize())
+        Loading          -> LoadingLayout(Modifier.fillMaxSize())
+        is Success       -> {
+            val pokemon = state.pokemon
+            LazyColumn(
+                contentPadding = PaddingValues(24.dp),
+                modifier = modifier
+            ) {
+                sectionHeader(id = R.string.about_title)
+                sectionContentDivider()
+                item {
+                    Specs(
+                        height = pokemon.height.value,
+                        weight = pokemon.weight.value,
+                        eggGroups = pokemon.eggGroups,
+                        abilities = pokemon.abilities,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                sectionDivider()
+                sectionHeader(id = R.string.stats_title)
+                sectionContentDivider()
+                items(
+                    items = pokemon.stats
+                ) { stat ->
+                    Stat(
+                        label = stat.name,
+                        value = stat.value,
+                        modifier = Modifier
+                    )
+                }
             }
         }
     }
