@@ -389,7 +389,7 @@ private fun LazyListScope.sectionContentDivider() {
 }
 
 private fun LazyListScope.sectionHeader(
-    @StringRes id: Int
+    @StringRes id: Int,
 ) {
     item {
         Text(
