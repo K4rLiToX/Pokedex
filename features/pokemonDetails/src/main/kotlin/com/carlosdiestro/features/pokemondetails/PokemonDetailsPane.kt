@@ -95,8 +95,8 @@ private fun PokemonDetailsPane(
     var topBarHeight by remember {
         mutableStateOf(0.dp)
     }
-    val alpha by animateFloatAsState(targetValue = scaffoldState.currentFraction, label = "back layer alpha")
-    val title by animateFloatAsState(targetValue = 1 - scaffoldState.currentFraction, label = "title alpha")
+    val backLayerVisibility by animateFloatAsState(targetValue = scaffoldState.currentFraction, label = "back layer visibility")
+    val titleVisibility by animateFloatAsState(targetValue = 1 - scaffoldState.currentFraction, label = "title visibility")
 
     BackdropScaffold(
         scaffoldState = scaffoldState,
@@ -119,7 +119,7 @@ private fun PokemonDetailsPane(
                                 Text(
                                     text = "#${state.pokemon.entry.order.value}",
                                     modifier = Modifier
-                                        .alpha(alpha)
+                                        .alpha(backLayerVisibility)
                                 )
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -132,12 +132,12 @@ private fun PokemonDetailsPane(
                                         modifier = Modifier
                                             .width(32.dp)
                                             .aspectRatio(1F)
-                                            .alpha(title)
+                                            .alpha(titleVisibility)
                                     )
                                     Text(
                                         text = state.pokemon.entry.name.value,
                                         modifier = Modifier
-                                            .alpha(title)
+                                            .alpha(titleVisibility)
                                     )
                                 }
                             }
@@ -171,7 +171,7 @@ private fun PokemonDetailsPane(
         backLayerContent = {
             Header(
                 state = state,
-                alpha = alpha
+                visibility = backLayerVisibility
             )
         },
         frontLayerContent = {
@@ -244,8 +244,8 @@ private fun PokemonDetailsPane(
 @Composable
 private fun Header(
     state: PokemonDetailsUiState,
-    alpha: Float,
-    modifier: Modifier = Modifier
+    visibility: Float,
+    modifier: Modifier = Modifier,
 ) {
     when (state) {
         DataNotAvailable -> Unit
@@ -261,7 +261,7 @@ private fun Header(
                 .build()
             Column(
                 modifier = modifier
-                    .alpha(alpha)
+                    .alpha(visibility)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
