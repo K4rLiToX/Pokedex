@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="searchbar_placeholder">Search pokemons…</string>"
+    <string name="empty_state">Empty</string>
+    <string name="data_not_available">Data not available</string>
+
+    <string name="about_title">About</string>
+    <string name="stats_title">Stats</string>
+
+    <string name="search_action_description">Search</string>
+    <string name="settings_action_description">Settings</string>
+    <string name="back_action_description">Back</string>
+    <string name="clear_query_action_description">Cancel query</string>
+    <string name="back_action_content_description">Back</string>
+</resources>

@@ -34,8 +34,7 @@ android {
 dependencies {
     implementation(projects.designSystem)
     implementation(projects.network)
-    implementation(projects.features.pokemonEntries)
-    implementation(projects.features.pokemonDetails)
+    implementation(projects.features.pokemonEntriesListDetails)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
