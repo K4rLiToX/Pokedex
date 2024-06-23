@@ -248,9 +248,9 @@ private fun Header(
     modifier: Modifier = Modifier,
 ) {
     when (state) {
-        DataNotAvailable -> Unit
-        Empty            -> Unit
-        Loading          -> Unit
+        DataNotAvailable -> DataNotAvailableLayout(Modifier.fillMaxSize())
+        Empty            -> EmptyLayout(Modifier.fillMaxSize())
+        Loading          -> LoadingLayout(Modifier.fillMaxSize())
         is Success       -> {
             val name = state.pokemon.entry.name.value
             val types = state.pokemon.types
