@@ -88,10 +88,10 @@ private fun PokemonEntriesPane(
         }
     ) { innerPadding ->
         when (state) {
-            is Loading          -> LoadingLayout(Modifier.fillMaxSize())
-            is Empty            -> EmptyLayout(Modifier.fillMaxSize())
+            is Loading -> LoadingLayout(Modifier.fillMaxSize())
+            is Empty -> EmptyLayout(Modifier.fillMaxSize())
             is DataNotAvailable -> DataNotAvailableLayout(Modifier.fillMaxSize())
-            is Success          -> PokemonEntriesLayout(
+            is Success -> PokemonEntriesLayout(
                 entries = state.entries,
                 contentPadding = PokemonEntriesPaneTokens.getPokemonEntriesLayoutPadding(
                     top = innerPadding.calculateTopPadding()

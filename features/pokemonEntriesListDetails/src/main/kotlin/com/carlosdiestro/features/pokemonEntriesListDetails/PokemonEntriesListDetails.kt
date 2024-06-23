@@ -55,7 +55,7 @@ private fun PokemonEntriesListDetailsScreen(
     currentDestination: ThreePaneScaffoldDestinationItem<Pair<Int, Int>>?,
     navigateBack: () -> Unit,
     navigateToDetails: (Pair<Int, Int>) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     ListDetailPaneScaffold(
         directive = directive,
