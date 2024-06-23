@@ -8,8 +8,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 object PokemonEntries
 
-fun NavGraphBuilder.pokemonEntriesPane() {
+fun NavGraphBuilder.pokemonEntriesPane(
+    onEntryClick: (Int, Int) -> Unit,
+) {
     composable<PokemonEntries> {
-        PokemonEntriesPane()
+        PokemonEntriesPane(
+            onEntryClick = onEntryClick
+        )
     }
 }

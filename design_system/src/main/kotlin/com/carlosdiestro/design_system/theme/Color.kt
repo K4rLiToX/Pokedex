@@ -218,6 +218,26 @@ internal val surfaceContainerDarkHighContrast = Color(0xFF2F1A17)
 internal val surfaceContainerHighDarkHighContrast = Color(0xFF3B2420)
 internal val surfaceContainerHighestDarkHighContrast = Color(0xFF472F2B)
 
+// Pokemon Types Color
+val Normal: Color = Color(0XFFA8A77A)
+val Fire: Color = Color(0XFFEE8130)
+val Electric: Color = Color(0XFFF7D02C)
+val Water: Color = Color(0XFF6390F0)
+val Grass: Color = Color(0XFF7AC74C)
+val Ice: Color = Color(0XFF96D9D6)
+val Fighting: Color = Color(0XFFC22E28)
+val Poison: Color = Color(0XFFA33EA1)
+val Ground: Color = Color(0XFFE2BF65)
+val Flying: Color = Color(0XFFA98FF3)
+val Psychic: Color = Color(0XFFF95587)
+val Bug: Color = Color(0XFFA6B91A)
+val Rock: Color = Color(0XFFB6A136)
+val Ghost: Color = Color(0XFF735797)
+val Dragon: Color = Color(0XFF6F35FC)
+val Dark: Color = Color(0XFF705746)
+val Steel: Color = Color(0XFFB7B7CE)
+val Fairy: Color = Color(0XFFD685AD)
+
 
 
 
