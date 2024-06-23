@@ -8,6 +8,7 @@ androidxCore = "1.13.1"
 androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.8.1"
+androidxMaterial = "1.6.8"
 androidxNavigation = "2.8.0-beta02"
 androidxPalette = "1.0.0"
 androidxTestExt = "1.1.5"
@@ -27,6 +28,7 @@ mockk = "1.13.11"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "androidxMaterial" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }

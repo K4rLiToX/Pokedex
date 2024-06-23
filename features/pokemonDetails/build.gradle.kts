@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.pokemon.domain)
 
     implementation(libs.androidx.palette.ktx)
+    implementation(libs.androidx.compose.material)
     implementation(libs.kotlinx.serialization)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif.compose)
