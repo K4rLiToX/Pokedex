@@ -28,6 +28,8 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif.compose)
+    implementation(libs.bundles.androidx.compose.adaptive)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
