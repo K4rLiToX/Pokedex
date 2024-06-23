@@ -1,7 +1,6 @@
 package com.carlosdiestro.features.pokemondetails
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,31 +13,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BackdropScaffold
+import androidx.compose.material.BackdropScaffoldState
+import androidx.compose.material.BackdropValue
+import androidx.compose.material.BackdropValue.Revealed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,6 +59,10 @@ import com.carlosdiestro.features.pokemondetails.components.Stat
 import com.carlosdiestro.features.pokemondetails.components.Type
 import com.carlosdiestro.features.pokemondetails.components.WeightSpec
 import com.carlosdiestro.features.pokemondetails.state.PokemonDetailsUiState
+import com.carlosdiestro.features.pokemondetails.state.PokemonDetailsUiState.DataNotAvailable
+import com.carlosdiestro.features.pokemondetails.state.PokemonDetailsUiState.Empty
+import com.carlosdiestro.features.pokemondetails.state.PokemonDetailsUiState.Loading
+import com.carlosdiestro.features.pokemondetails.state.PokemonDetailsUiState.Success
 import com.carlosdiestro.pokemon.domain.models.PokemonAbility
 import com.carlosdiestro.pokemon.domain.models.PokemonEggGroup
 
@@ -74,7 +82,7 @@ internal fun PokemonDetailsPane(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun PokemonDetailsPane(
     onBack: () -> Unit,
@@ -82,37 +90,60 @@ private fun PokemonDetailsPane(
     backgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberStandardBottomSheetState()
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = sheetState
-    )
-    val sheetHeight = LocalConfiguration.current.screenHeightDp.dp - 40.dp
+    val density = LocalDensity.current
+    val scaffoldState = rememberBackdropScaffoldState(initialValue = Revealed)
+    var topBarHeight by remember {
+        mutableStateOf(0.dp)
+    }
+    val alpha by animateFloatAsState(targetValue = scaffoldState.currentFraction, label = "back layer alpha")
+    val title by animateFloatAsState(targetValue = 1 - scaffoldState.currentFraction, label = "title alpha")
 
-    val contentVisibility by animateFloatAsState(
-        targetValue = if (sheetState.targetValue == SheetValue.Expanded) 0F else 1F,
-        label = "Content Visibility"
-    )
-
-    val titleVisibility by animateFloatAsState(
-        targetValue = if (sheetState.targetValue == SheetValue.PartiallyExpanded) 0F else 1F,
-        label = "Title Visibility"
-    )
-
-    BottomSheetScaffold(
+    BackdropScaffold(
         scaffoldState = scaffoldState,
-        topBar = {
+        backLayerBackgroundColor = backgroundColor,
+        frontLayerBackgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+        frontLayerScrimColor = Color.Unspecified,
+        frontLayerShape = MaterialTheme.shapes.extraLarge,
+        peekHeight = topBarHeight,
+        appBar = {
             TopAppBar(
                 title = {
                     when (state) {
-                        is PokemonDetailsUiState.Success -> {
-                            Text(
-                                text = state.pokemon.entry.name.value,
-                                modifier = Modifier
-                                    .alpha(titleVisibility)
-                            )
+                        is Success -> {
+                            val imageRequest = ImageRequest.Builder(LocalContext.current)
+                                .data("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${state.pokemon.entry.id.value}.gif")
+                                .decoderFactory(ImageDecoderDecoder.Factory())
+                                .crossfade(true)
+                                .build()
+                            Box {
+                                Text(
+                                    text = "#${state.pokemon.entry.order.value}",
+                                    modifier = Modifier
+                                        .alpha(alpha)
+                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    AsyncImage(
+                                        model = imageRequest,
+                                        contentDescription = state.pokemon.entry.name.value,
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier
+                                            .width(32.dp)
+                                            .aspectRatio(1F)
+                                            .alpha(title)
+                                    )
+                                    Text(
+                                        text = state.pokemon.entry.name.value,
+                                        modifier = Modifier
+                                            .alpha(title)
+                                    )
+                                }
+                            }
                         }
 
-                        else                             -> Unit
+                        else       -> Unit
                     }
                 },
                 navigationIcon = {
@@ -121,53 +152,80 @@ private fun PokemonDetailsPane(
                     ) {
                         Icon(
                             imageVector = PokedexIcons.Back,
-                            contentDescription = stringResource(id = R.string.back_action_content_description)
+                            contentDescription = stringResource(id = R.string.data_not_available_state)
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor
-                )
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .onGloballyPositioned {
+                        val heightPx = it.size.height
+                        val heightDp = with(density) { heightPx.toDp() }
+                        topBarHeight = heightDp
+                    }
             )
         },
-        sheetContent = {
+        backLayerContent = {
+            Header(
+                state = state,
+                alpha = alpha
+            )
+        },
+        frontLayerContent = {
             when (state) {
-                is PokemonDetailsUiState.Loading          -> LoadingLayout(Modifier.fillMaxSize())
-                is PokemonDetailsUiState.Empty            -> EmptyLayout(Modifier.fillMaxSize())
-                is PokemonDetailsUiState.DataNotAvailable -> DataNotAvailableLayout(Modifier.fillMaxSize())
-                is PokemonDetailsUiState.Success          -> {
+                DataNotAvailable -> Unit
+                Empty            -> Unit
+                Loading          -> Unit
+                is Success       -> {
                     val pokemon = state.pokemon
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .requiredHeight(sheetHeight)
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.about_title),
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .padding(top = 24.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Specs(
-                            height = pokemon.height.value,
-                            weight = pokemon.weight.value,
-                            eggGroups = pokemon.eggGroups,
-                            abilities = pokemon.abilities,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp)
-                        )
-                        Spacer(modifier = Modifier.height(32.dp))
-                        Text(
-                            text = stringResource(id = R.string.stats_title),
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        pokemon.stats.forEach { stat ->
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.about_title),
+                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .padding(top = 24.dp)
+                            )
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                        item {
+                            Specs(
+                                height = pokemon.height.value,
+                                weight = pokemon.weight.value,
+                                eggGroups = pokemon.eggGroups,
+                                abilities = pokemon.abilities,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 24.dp)
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.stats_title),
+                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                        items(
+                            items = pokemon.stats
+                        ) { stat ->
                             Stat(
                                 label = stat.name,
                                 value = stat.value,
@@ -179,61 +237,68 @@ private fun PokemonDetailsPane(
                 }
             }
         },
-        sheetPeekHeight = 500.dp,
-        sheetContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-        sheetContentColor = MaterialTheme.colorScheme.onSurface,
-        sheetTonalElevation = 0.dp,
-        sheetDragHandle = {},
-        sheetShape = RectangleShape,
         modifier = modifier
-    ) { innerPadding ->
-        when (state) {
-            is PokemonDetailsUiState.Loading          -> LoadingLayout(Modifier.fillMaxSize())
-            is PokemonDetailsUiState.Empty            -> EmptyLayout(Modifier.fillMaxSize())
-            is PokemonDetailsUiState.DataNotAvailable -> DataNotAvailableLayout(Modifier.fillMaxSize())
-            is PokemonDetailsUiState.Success          -> {
-                Column(
+    )
+}
+
+@Composable
+private fun Header(
+    state: PokemonDetailsUiState,
+    alpha: Float,
+    modifier: Modifier = Modifier
+) {
+    when (state) {
+        DataNotAvailable -> Unit
+        Empty            -> Unit
+        Loading          -> Unit
+        is Success       -> {
+            val name = state.pokemon.entry.name.value
+            val types = state.pokemon.types
+            val imageRequest = ImageRequest.Builder(LocalContext.current)
+                .data("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${state.pokemon.entry.id.value}.gif")
+                .decoderFactory(ImageDecoderDecoder.Factory())
+                .crossfade(true)
+                .build()
+            Column(
+                modifier = modifier
+                    .alpha(alpha)
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .padding(top = innerPadding.calculateTopPadding())
-                        .background(backgroundColor)
-                        .padding(horizontal = 16.dp)
-                        .alpha(contentVisibility)
+                        .fillMaxWidth()
                 ) {
-                    Text(
-                        text = state.pokemon.entry.name.value,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        state.pokemon.types.forEach { type ->
-                            Type(label = type.value)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
+                    AsyncImage(
+                        model = imageRequest,
+                        contentDescription = name,
+                        contentScale = ContentScale.Fit,
                         modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        val imageRequest = ImageRequest.Builder(LocalContext.current)
-                            .data("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${state.pokemon.entry.id.value}.gif")
-                            .decoderFactory(ImageDecoderDecoder.Factory())
-                            .crossfade(true)
-                            .build()
-                        AsyncImage(
-                            model = imageRequest,
-                            contentDescription = state.pokemon.entry.name.value,
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .width(140.dp)
-                                .aspectRatio(1F)
-                        )
+                            .width(140.dp)
+                            .aspectRatio(1F)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    types.forEach { type ->
+                        Type(label = type.value)
                     }
                 }
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }
@@ -308,3 +373,15 @@ private fun DataNotAvailableLayout(
         )
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+private val BackdropScaffoldState.currentFraction: Float
+    get() {
+        val fraction = progress.fraction
+        return when {
+            currentValue == BackdropValue.Concealed && targetValue == BackdropValue.Concealed -> 0f
+            currentValue == Revealed && targetValue == Revealed                               -> 1f
+            currentValue == BackdropValue.Concealed && targetValue == Revealed                -> fraction
+            else                                                                              -> 1f - fraction
+        }
+    }
